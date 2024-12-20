@@ -3,6 +3,7 @@ package adam.dev.liveCode.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -28,5 +29,8 @@ public class User {
 
     @OneToMany(mappedBy = "requestedUser")
     private Set<RoomUserRequest> roomUserRequests;
+
+    @OneToMany(mappedBy = "codeLineWriter")
+    private List<CodeLine> codeLines;
 
 }

@@ -21,7 +21,7 @@ public class RoomUser {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
 }
 

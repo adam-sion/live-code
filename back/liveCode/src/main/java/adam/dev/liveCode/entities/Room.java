@@ -24,4 +24,7 @@ public class Room {
     @OneToMany(mappedBy = "requestedRoom")
     private Set<RoomUserRequest> roomUserRequests;
 
+    @OneToMany(mappedBy = "originalRoom")
+    private RoomCode roomCode;
+
 }
