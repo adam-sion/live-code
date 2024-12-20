@@ -70,18 +70,3 @@ CREATE TABLE live_code.code_line (
     code_line_details_id BIGINT NOT NULL REFERENCES live_code.code_line_details(id) ON DELETE CASCADE,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Function to update the 'updated_at' field when a code line is updated
-CREATE OR REPLACE FUNCTION set_updated_at() 
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;  -- Set updated_at to current timestamp
-    RETURN NEW;  -- Return the modified row
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger to update the 'updated_at' field in 'code_line' table when a row is updated
-CREATE TRIGGER update_code_line_timestamp
-BEFORE UPDATE ON live_code.code_line
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
