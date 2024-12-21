@@ -2,11 +2,13 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name="room_code")
 public class RoomCode {
 
@@ -22,6 +24,6 @@ public class RoomCode {
     private String language;
 
     @OneToMany(mappedBy = "roomCode")
-    private List<CodeLine> codeLines;
+    private Set<CodeLine> codeLines;
 
 }

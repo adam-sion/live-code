@@ -18,7 +18,7 @@ public class CodeLineDetails {
     @Column(name = "line_number")
     private int lineNumber;
 
-    @OneToOne(mappedBy = "codeLine")
+    @OneToOne(mappedBy = "codeLineDetails")
     private CodeLine codeLine;
 
 }

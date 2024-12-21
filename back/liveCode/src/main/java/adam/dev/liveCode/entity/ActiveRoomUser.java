@@ -2,11 +2,14 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-@Data
 @Entity
-@IdClass(ActiveRoomUserId.class)
+@Data
+@NoArgsConstructor
+@IdClass(RoomUserId.class)
 @Table(name="active_room_user")
 public class ActiveRoomUser {
 

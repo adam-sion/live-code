@@ -2,9 +2,11 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
 @IdClass(RoomUserId.class)
 @Table(name="room_user")
 public class RoomUser {

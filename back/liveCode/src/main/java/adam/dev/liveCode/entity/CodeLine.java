@@ -2,11 +2,13 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "code_line")
 public class CodeLine {
 

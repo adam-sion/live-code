@@ -2,12 +2,14 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name="rooms")
 public class Room {
 
