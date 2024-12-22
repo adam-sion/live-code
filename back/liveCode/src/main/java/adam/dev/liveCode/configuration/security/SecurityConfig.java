@@ -15,13 +15,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
-@AllArgsConstructor
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     private CustomUserDetailsService customUserDetailsService;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService customUserDetailsService) {
+      this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+      this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
