@@ -1,12 +1,11 @@
 package adam.dev.liveCode.controller;
 
-import adam.dev.liveCode.configuration.jwt.model.AuthRequest;
 import adam.dev.liveCode.configuration.jwt.JwtUtil;
+import adam.dev.liveCode.configuration.jwt.model.AuthRequest;
 import adam.dev.liveCode.configuration.jwt.model.AuthResponse;
 import adam.dev.liveCode.entity.User;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@AllArgsConstructor
 public class AuthController {
 
     private UserService userService;
@@ -34,6 +32,14 @@ public class AuthController {
 
     private PasswordEncoder passwordEncoder;
 
+
+    public AuthController(UserService userService, CustomUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {

@@ -2,41 +2,41 @@ package adam.dev.liveCode.configuration.security;
 
 import adam.dev.liveCode.configuration.jwt.JwtAuthenticationFilter;
 import adam.dev.liveCode.service.CustomUserDetailsService;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
-
-@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService customUserDetailsService) {
-      this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-      this.customUserDetailsService = customUserDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/auth/**"))  // Disable CSRF for /users endpoint
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .exceptionHandling((ex)-> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // Add JWT filter before default auth filter
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Allow GET requests to /users
+                        .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll() // Allow POST requests to /users
+                        .anyRequest().authenticated()  // All other requests require authentication
+                )
+                .exceptionHandling((ex) -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -57,5 +57,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
