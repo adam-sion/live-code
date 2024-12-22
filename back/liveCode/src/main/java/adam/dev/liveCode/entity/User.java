@@ -3,13 +3,12 @@ package adam.dev.liveCode.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
-@NoArgsConstructor
 @Table(name="users")
 public class User {
 
@@ -35,4 +34,23 @@ public class User {
     @OneToMany(mappedBy = "codeLineWriter")
     private List<CodeLine> codeLines;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
