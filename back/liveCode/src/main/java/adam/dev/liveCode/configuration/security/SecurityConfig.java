@@ -19,12 +19,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     private CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService customUserDetailsService) {
-      this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService customUserDetailsService) {
+      this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
       this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -34,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling((ex)-> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // Add JWT filter before default auth filter
 
         return http.build();
