@@ -1,4 +1,4 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class Room {
     @OneToMany(mappedBy = "requestedRoom")
     private Set<RoomUserRequest> roomUserRequests;
 
-    @OneToMany(mappedBy = "originalRoom")
+    @OneToOne(mappedBy = "originalRoom")
     private RoomCode roomCode;
 
 }

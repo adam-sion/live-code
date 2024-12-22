@@ -1,4 +1,4 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,12 +9,18 @@ import lombok.Data;
 @Table(name="room_user")
 public class RoomUser {
 
-    @Id
+   @Id
+   private Long roomId;
+
+   @Id
+   private Long userId;
+
+
     @ManyToOne
     @JoinColumn(name="room_id")
     private Room room;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;

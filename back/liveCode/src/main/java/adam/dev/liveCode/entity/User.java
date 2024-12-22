@@ -1,4 +1,4 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

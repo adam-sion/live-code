@@ -1,5 +1,8 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
 
     USER("user"),
@@ -10,10 +13,6 @@ public enum Role {
 
      Role(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-         return this.name;
     }
 
 }

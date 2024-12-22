@@ -1,8 +1,7 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.List;
 
 @Data
 @Entity
@@ -20,6 +19,6 @@ public class CodeLineDetails {
     private int lineNumber;
 
     @OneToOne(mappedBy = "codeLine")
-    private List<CodeLine> codeLines;
+    private CodeLine codeLine;
 
 }

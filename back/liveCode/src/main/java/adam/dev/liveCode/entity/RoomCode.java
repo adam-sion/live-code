@@ -1,4 +1,4 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class RoomCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "room_id")
     private Room originalRoom;
 

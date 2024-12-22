@@ -1,4 +1,4 @@
-package adam.dev.liveCode.entities;
+package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class CodeLine {
     @JoinColumn(name="room_code_id")
     private RoomCode roomCode;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User codeLineWriter;
 
