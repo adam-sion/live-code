@@ -3,6 +3,7 @@ package adam.dev.liveCode.service;
 import adam.dev.liveCode.entity.User;
 import adam.dev.liveCode.exception.EntityExistsException;
 import adam.dev.liveCode.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public User createUser(User user) {
         try {
             return userRepository.save(user);
@@ -29,7 +31,6 @@ public class UserService {
             throw new EntityExistsException("User already exists");
         }
     }
-
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
