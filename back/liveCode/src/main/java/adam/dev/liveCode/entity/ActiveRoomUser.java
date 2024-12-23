@@ -9,25 +9,22 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@IdClass(RoomUserId.class)
-@Table(name="active_room_user")
+@Table(name = "active_room_user", schema = "live_code")
 public class ActiveRoomUser {
 
-    @Id
-    Long roomId;
-
-    @Id
-    Long userId;
+    @EmbeddedId
+    RoomUserId id;
 
     @ManyToOne
-    @JoinColumn(name="roomId")
+    @MapsId("roomId")
+    @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @Column(name="joined_at")
+    @Column(name = "joined_at")
     private LocalDateTime joinedAt;
-
 }

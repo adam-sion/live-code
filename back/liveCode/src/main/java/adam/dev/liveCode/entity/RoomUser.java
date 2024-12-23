@@ -7,24 +7,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@IdClass(RoomUserId.class)
 @Table(name="room_user")
 public class RoomUser {
 
-   @Id
-   private Long roomId;
-
-   @Id
-   private Long userId;
-
+   @EmbeddedId
+   RoomUserId id;
 
     @ManyToOne
-    @JoinColumn(name="room_id")
+    @MapsId("roomId")
+    @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private Room room;
 
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
     @Column
