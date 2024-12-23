@@ -1,9 +1,9 @@
 package adam.dev.liveCode.controller;
 
-import adam.dev.liveCode.configuration.jwt.JwtUtil;
-import adam.dev.liveCode.configuration.jwt.model.AuthRequest;
-import adam.dev.liveCode.configuration.jwt.model.AuthResponse;
 import adam.dev.liveCode.entity.User;
+import adam.dev.liveCode.security.jwt.JwtUtil;
+import adam.dev.liveCode.security.jwt.model.AuthRequest;
+import adam.dev.liveCode.security.jwt.model.AuthResponse;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
 import org.springframework.http.ResponseEntity;

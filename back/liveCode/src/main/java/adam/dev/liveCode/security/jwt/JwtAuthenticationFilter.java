@@ -1,4 +1,4 @@
-package adam.dev.liveCode.configuration.jwt;
+package adam.dev.liveCode.security.jwt;
 
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;

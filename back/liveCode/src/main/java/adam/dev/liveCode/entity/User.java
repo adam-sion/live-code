@@ -1,20 +1,13 @@
 package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 
 @Entity
 @Table(name="users")
 public class User {
-
-    public User(Long id, String name, String email, String password) {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +28,8 @@ public class User {
     @OneToMany(mappedBy = "requestedUser")
     private Set<RoomUserRequest> roomUserRequests;
 
-    @OneToMany(mappedBy = "codeLineWriter")
-    private List<CodeLine> codeLines;
+    @OneToMany(mappedBy = "editor")
+    private Set<CodeLineOperation> codeLineOperations;
 
     public User() {}
 

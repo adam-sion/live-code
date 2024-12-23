@@ -1,17 +1,16 @@
 package adam.dev.liveCode.entity;
 
-import lombok.Getter;
+public enum OperationType {
 
-@Getter
-public enum Role {
+    UPDATE("update"),
 
-    USER("user"),
+    INSERT("insert"),
 
-     ADMIN("admin");
+    DELETE("delete");
 
     private final String name;
 
-     Role(String name) {
+    OperationType(String name) {
         this.name = name;
     }
 

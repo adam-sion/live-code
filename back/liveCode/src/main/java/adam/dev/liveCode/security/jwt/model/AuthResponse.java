@@ -1,4 +1,4 @@
-package adam.dev.liveCode.configuration.jwt.model;
+package adam.dev.liveCode.security.jwt.model;
 
 public class AuthResponse {
 

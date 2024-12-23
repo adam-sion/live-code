@@ -20,10 +20,6 @@ public class CodeLine {
     @JoinColumn(name="room_code_id")
     private RoomCode roomCode;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User codeLineWriter;
-
     @OneToOne
     @JoinColumn(name="code_line_details_id")
     private CodeLineDetails codeLineDetails;

@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<ErrorResponse> handleResourceExists(EntityExistsException ex) {
-        ErrorResponse error = new ErrorResponse("Resource already exists", ex.getMessage());
+        ErrorResponse error = new ErrorResponse("Already exists", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
