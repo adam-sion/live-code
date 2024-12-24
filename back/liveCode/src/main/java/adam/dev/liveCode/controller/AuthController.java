@@ -1,11 +1,13 @@
 package adam.dev.liveCode.controller;
 
 import adam.dev.liveCode.entity.User;
+import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.security.jwt.JwtUtil;
 import adam.dev.liveCode.security.jwt.model.AuthRequest;
 import adam.dev.liveCode.security.jwt.model.AuthResponse;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +56,11 @@ public class AuthController {
         userService.createUser(userToRegister);
 
         return ResponseEntity.ok("User registered successfully!");
+    }
+
+    @RequestMapping("/**")
+    public ResponseEntity<ErrorResponse> handleInvalidEndpoint() {
+        return new ResponseEntity<>(new ErrorResponse("Not found", "endpoint not found"), HttpStatus.NOT_FOUND);  // Correct order
     }
 
 }
