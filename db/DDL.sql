@@ -67,5 +67,6 @@ CREATE TABLE live_code.code_line_operation (
     code_line_id BIGINT NOT NULL REFERENCES live_code.code_line(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL REFERENCES live_code.users(id) ON DELETE CASCADE,
     operation_type VARCHAR(50) CHECK(operation_type IN ('insert', 'update', 'delete')) NOT NULL,
-    new_content TEXT 
+    new_content TEXT, 
+    line_number INT NOT NULL
 );

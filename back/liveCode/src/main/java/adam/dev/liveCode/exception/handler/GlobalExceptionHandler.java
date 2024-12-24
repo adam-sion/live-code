@@ -1,9 +1,9 @@
 package adam.dev.liveCode.exception.handler;
 
-import adam.dev.liveCode.exception.EntityExistsException;
-import adam.dev.liveCode.exception.EntityNotFoundException;
 import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.exception.UnauthorizedAccessException;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -1,8 +1,8 @@
 package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.entity.User;
-import adam.dev.liveCode.exception.EntityExistsException;
 import adam.dev.liveCode.repository.UserRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
