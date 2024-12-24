@@ -6,7 +6,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Data
 @Embeddable
 public class RoomUserId implements Serializable {
 

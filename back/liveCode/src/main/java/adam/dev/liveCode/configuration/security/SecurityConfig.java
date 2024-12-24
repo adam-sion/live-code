@@ -31,8 +31,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/auth/**"))  // Disable CSRF for /users endpoint
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Allow GET requests to /users
-                        .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll() // Allow POST requests to /users
+                        .requestMatchers("/auth/**").permitAll()  // Allow GET requests to /users
                         .anyRequest().authenticated()  // All other requests require authentication
                 )
                 .exceptionHandling((ex) -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
