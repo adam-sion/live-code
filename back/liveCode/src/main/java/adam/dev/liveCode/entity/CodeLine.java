@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "code_line")
 public class CodeLine {
 
-    public CodeLine() {
-    }
+    public CodeLine() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

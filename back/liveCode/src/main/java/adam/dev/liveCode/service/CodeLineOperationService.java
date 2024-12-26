@@ -3,31 +3,33 @@ package adam.dev.liveCode.service;
 import adam.dev.liveCode.entity.CodeLine;
 import adam.dev.liveCode.entity.CodeLineDetails;
 import adam.dev.liveCode.entity.CodeLineOperation;
+import adam.dev.liveCode.entity.User;
+import adam.dev.liveCode.repository.CodeLineOperationRepository;
 import adam.dev.liveCode.repository.CodeLineRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CodeLineOperationService {
 
-    private final CodeLineRepository codeLineRepository;
-
-    private RoomCodeService roomCodeService;
+    private final CodeLineOperationRepository codeLineOperationRepository;
 
     private CodeLineService codeLineService;
 
     private CodeLineDetailsService codeLineDetailsService;
 
-    public CodeLineOperationService(RoomCodeService roomCodeService, CodeLineService codeLineService, CodeLineRepository codeLineRepository) {
-        this.roomCodeService = roomCodeService;
+    public CodeLineOperationService(CodeLineOperationRepository codeLineOperationRepository, CodeLineService codeLineService, CodeLineDetailsService codeLineDetailsService) {
+        this.codeLineOperationRepository = codeLineOperationRepository;
         this.codeLineService = codeLineService;
-        this.codeLineRepository = codeLineRepository;
+        this.codeLineDetailsService = codeLineDetailsService;
     }
+
 
     @Transactional
     public void handleCodeLineOperation(CodeLineOperation operation) {
-        //save
-
+        createCodeLineOperation(operation);
         CodeLine codeLine = new CodeLine();
         CodeLineDetails codeLineDetails = new CodeLineDetails();
 
@@ -51,6 +53,15 @@ public class CodeLineOperationService {
                 break;
             default:
                 throw new IllegalArgumentException("Unknown operation type");
+        }
+    }
+
+    @Transactional
+    public void createCodeLineOperation(CodeLineOperation codeLineOperation) {
+        try {
+            codeLineOperationRepository.save(codeLineOperation);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityExistsException("Code line operation already exists");
         }
     }
 

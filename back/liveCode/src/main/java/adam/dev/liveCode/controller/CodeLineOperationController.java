@@ -16,7 +16,7 @@ public class CodeLineOperationController {
     }
 
     @MessageMapping("/sendCodeLineOperation")
-    @SendTo("/room/{roomId}")
+    @SendTo("topic/room/{roomId}")
     public CodeLineOperation sendCodeLineOperation(CodeLineOperation codeLineOperation) {
         codeLineOperationService.handleCodeLineOperation(codeLineOperation);
 

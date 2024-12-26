@@ -24,9 +24,9 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(User user) {
+    public void createUser(User user) {
         try {
-            return userRepository.save(user);
+             userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
             throw new EntityExistsException("User already exists");
         }
