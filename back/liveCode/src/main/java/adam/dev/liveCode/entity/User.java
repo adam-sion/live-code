@@ -1,6 +1,8 @@
 package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Set;
 
@@ -13,12 +15,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Username cannot be null")
     @Column
     private String username;
 
+    @NotNull(message = "Password cannot be null")
     @Column
     private String password;
 
+    @NotNull(message = "Email cannot be null")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            message = "Invalid email format")
     @Column
     private String email;
 

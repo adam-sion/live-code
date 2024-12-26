@@ -3,6 +3,7 @@ package adam.dev.liveCode.security.jwt.model;
 import jakarta.validation.constraints.NotNull;
 
 public class AuthRequest {
+
     @NotNull(message = "Username cannot be null")
     private String username;
 
@@ -16,4 +17,5 @@ public class AuthRequest {
     public String getPassword() {
         return password;
     }
+
 }

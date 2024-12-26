@@ -7,8 +7,10 @@ import adam.dev.liveCode.security.jwt.model.AuthRequest;
 import adam.dev.liveCode.security.jwt.model.AuthResponse;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +44,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest) {
+        if (authRequest == null) {
+            throw new HttpMessageNotReadableException("Request body is missing or malformed");
+        }
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -51,7 +57,11 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User userToRegister) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid User userToRegister) {
+        if (userToRegister == null) {
+            throw new HttpMessageNotReadableException("Request body is missing or malformed");
+        }
+
         userToRegister.setPassword(passwordEncoder.encode(userToRegister.getPassword()));
         userService.createUser(userToRegister);
 
