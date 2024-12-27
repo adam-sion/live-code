@@ -22,7 +22,7 @@ public class RoomCode {
     @Column
     private String language;
 
-    @OneToMany(mappedBy = "roomCode")
+    @OneToMany(mappedBy = "roomCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CodeLine> codeLines;
 
     public Room getOriginalRoom() {
