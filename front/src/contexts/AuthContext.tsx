@@ -2,7 +2,7 @@ import { createContext, ReactNode, FC, useContext, useState} from "react";
 import axios from "axios";
 import { LoginData } from "../types/LoginData";
 import { SignupData } from "../types/SignupData";
-import Swal from "sweetalert2"
+import { toast } from "react-toastify";
 interface AuthContextType {
   login: (user: LoginData) => Promise<boolean>;
   signup: (user:SignupData)=> Promise<boolean>;
@@ -22,18 +22,10 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     try {
     await api.post('/login', user, {withCredentials:true});
      setIsUserAuthenticated(true);
-     Swal.fire({
-      title: "Success",
-      text: "signed in successfully!",
-      icon: "success"
-    });
+     toast.success("signed in successfully!");
     return true;
     } catch(error) {
-      Swal.fire({
-        title: "Failed",
-        text: "sign in falied",
-        icon: "error"
-      });
+      toast.error("sign in failed");
       return false;
     }
   }
@@ -41,18 +33,10 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const signup = async (user:SignupData)=> {
     try {
       await api.post('/signup', user);
-     Swal.fire({
-      title: "Success",
-      text: "signed up successfully",
-      icon: "success"
-    });
+      toast.success("signed up successfully!");
     return true;
     } catch(error) {
-      Swal.fire({
-        title: "Failed",
-        text: "sign up falied",
-        icon: "error"
-      });
+      toast.error("sign up failed")
       return false;
     }
   }
