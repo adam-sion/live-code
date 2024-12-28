@@ -1,5 +1,4 @@
-export type User = {
+export type LoginData = {
     username: string,
     password:string,
-    email:string
 }

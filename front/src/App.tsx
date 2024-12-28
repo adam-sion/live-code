@@ -3,11 +3,15 @@ import './App.css'
 import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes/Routes.tsx'
-
+import { AuthProvider } from './contexts/AuthContext.tsx'
 
 const App:FC = ()=> {
   return (
-    <RouterProvider router={router}></RouterProvider>
+    <AuthProvider>
+    <RouterProvider router={router}>
+    </RouterProvider>
+    </AuthProvider>
+   
   )
 }
 

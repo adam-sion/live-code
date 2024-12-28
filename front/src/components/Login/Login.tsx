@@ -16,7 +16,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import "./Login.css";
-import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
+import { LoginData } from "../../types/LoginData";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -26,11 +28,6 @@ const loginSchema = Yup.object().shape({
     .required("Password is required")
     .max(100, "reached chars limit"),
 });
-
-interface LoginData {
-  username: string;
-  password: string;
-}
 
 interface LoginProps {
   setIsSignup:Dispatch<SetStateAction<boolean>>
@@ -50,10 +47,15 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
     setShowPassword(!showPassword);
   };
 
+const navigate = useNavigate();
+const {login, setIsUserAuthenticated} = useAuth();
+
   const onSubmit = async (data: LoginData) => {
         reset(); 
+        login(data);
+        setIsUserAuthenticated(true);
+        navigate("/");
     } 
-
 
   return (
     <Box
