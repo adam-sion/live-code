@@ -4,6 +4,7 @@ import adam.dev.liveCode.security.jwt.JwtAuthenticationFilter;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/auth/**"))  // Disable CSRF for /users endpoint
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/auth/**").permitAll()  // Allow GET requests to /users
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()  // Allow GET requests to /users
                         .anyRequest().authenticated()  // All other requests require authentication
                 )
                 .exceptionHandling((ex) -> ex.authenticationEntryPoint(customAuthenticationEntryPoint))
