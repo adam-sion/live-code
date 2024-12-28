@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import PersonIcon from "@mui/icons-material/Person";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { EmailOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import "./Signup.css";
 
@@ -24,11 +24,15 @@ const signupSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .max(100, "reached chars limit"),
+    email: Yup.string()
+    .required("Email is required")
+    .email("inavlid email format"),
 });
 
 interface SignupData {
   username: string;
   password: string;
+  email:string;
 }
 
 interface SignupProps {
@@ -106,7 +110,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           helperText={errors.username ? errors.username.message : ""}
           type="text"
           variant="standard"
-          sx={{
+          sx={{   
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -166,6 +170,35 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           }}
           {...register("password")}
         />
+
+          <TextField
+          label="Email"
+          error={!!errors.email}
+          helperText={errors.email ? errors.email.message : ""}
+          type="email"
+          variant="standard"
+          sx={{   
+            "& .MuiInputLabel-root": { color: "black" },
+            "& .MuiInputBase-root": { color: "black" },
+            "& .MuiInput-underline:before": { borderBottomColor: "black" },
+            "& .MuiInput-underline:hover:before": {
+              borderBottomColor: "black",
+            },
+            "& .MuiInput-underline:after": { borderBottomColor: "black" },
+          }}
+          {...register("email")}
+          InputProps={{
+            endAdornment: errors.username ? (
+              <ErrorOutlineIcon sx={{ color: "red" }} />
+            ) : (
+              <InputAdornment position="end">
+                <IconButton edge="end" aria-label="username tag">
+                  <EmailOutlined sx={{color:"black"}}/>
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <Box sx={{ marginTop: 3, width: "100%" }}>
           <Button
             type="submit"
@@ -183,7 +216,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
             Submit
           </Button>
         </Box>
-        <Box sx={{ marginTop: 1, width: "100%" }}>
+        <Box sx={{ width: "100%" }}>
           <p className="sign-up">Already have an account? <br /><span onClick={()=> setIsSignup(false)}>sign in</span></p>
         </Box>
       </Stack>
