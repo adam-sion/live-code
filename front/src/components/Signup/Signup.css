@@ -1,0 +1,16 @@
+.sign-up {
+    text-align: center;
+    font-family: 'Comic Sans MS', "Comic Sans", 'cursive';
+    color: black;
+  }
+  
+  .sign-up span {
+    color: #095475;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .sign-up span:hover {
+    color: white;
+  }

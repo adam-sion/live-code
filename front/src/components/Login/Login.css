@@ -1,0 +1,16 @@
+.sign-in {
+    text-align: center;
+    font-family: 'Comic Sans MS', "Comic Sans", 'cursive';
+    color: white;
+  }
+  
+  .sign-in span {
+    color: rgb(130, 171, 237);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .sign-in span:hover {
+    color: white;
+  }
