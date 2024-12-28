@@ -16,6 +16,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { EmailOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import "./Signup.css";
+import { useAuth } from "../../contexts/AuthContext";
 
 const signupSchema = Yup.object().shape({
   username: Yup.string()
@@ -24,7 +25,7 @@ const signupSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
     .max(100, "reached chars limit"),
-    email: Yup.string()
+  email: Yup.string()
     .required("Email is required")
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -35,14 +36,14 @@ const signupSchema = Yup.object().shape({
 interface SignupData {
   username: string;
   password: string;
-  email:string;
+  email: string;
 }
 
 interface SignupProps {
-  setIsSignup:Dispatch<SetStateAction<boolean>>
+  setIsSignup: Dispatch<SetStateAction<boolean>>
 }
 
-export const Signup: FC<SignupProps> = ({setIsSignup}) => {
+export const Signup: FC<SignupProps> = ({ setIsSignup }) => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -55,11 +56,14 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const { signup } = useAuth();
 
-  const onSubmit = (data: SignupData) => {
-    console.log(data);
+  const onSubmit = async (data: SignupData) => {
+    if (await signup(data)) {
+    setIsSignup(false);
+    }
     reset();
-  };
+  }
 
   return (
     <Box
@@ -98,11 +102,13 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           <Typography
             variant="h4"
             sx={{
+            
+              fontSize: "1.5em",
               fontWeight: "bold",
               color: "black",
               fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
               overflow: "hidden",
-          
+
             }}
           >
             Sign up
@@ -116,7 +122,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           type="text"
           variant="standard"
           sx={{
-            width:'100%',   
+            width: '100%',
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -147,7 +153,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           autoComplete="current-password"
           variant="standard"
           sx={{
-            width:'100%',
+            width: '100%',
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -178,14 +184,14 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           {...register("password")}
         />
 
-          <TextField
+        <TextField
           label="Email"
           error={!!errors.email}
           helperText={errors.email ? errors.email.message : ""}
           type="text"
           variant="standard"
-          sx={{   
-            width:'100%',
+          sx={{
+            width: '100%',
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -201,7 +207,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
             ) : (
               <InputAdornment position="end">
                 <IconButton edge="end" aria-label="username tag">
-                  <EmailOutlined sx={{color:"black"}}/>
+                  <EmailOutlined sx={{ color: "black" }} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -225,7 +231,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           </Button>
         </Box>
         <Box sx={{ width: "100%" }}>
-          <p className="sign-up">Already have an account? <br /><span onClick={()=> setIsSignup(false)}>sign in</span></p>
+          <p className="sign-up">Already have an account? <br /><span onClick={() => setIsSignup(false)}>sign in</span></p>
         </Box>
       </Stack>
     </Box>

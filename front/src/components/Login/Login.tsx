@@ -20,6 +20,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { LoginData } from "../../types/LoginData";
 import { useNavigate } from "react-router-dom";
 
+
 const loginSchema = Yup.object().shape({
   username: Yup.string()
     .required("Username is required")
@@ -48,13 +49,15 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
   };
 
 const navigate = useNavigate();
-const {login, setIsUserAuthenticated} = useAuth();
+const {login} = useAuth();
 
   const onSubmit = async (data: LoginData) => {
         reset(); 
-        login(data);
-        setIsUserAuthenticated(true);
-        navigate("/");
+        
+        if (await login(data)) {
+          navigate("/");
+        }
+
     } 
 
   return (
