@@ -26,7 +26,10 @@ const signupSchema = Yup.object().shape({
     .max(100, "reached chars limit"),
     email: Yup.string()
     .required("Email is required")
-    .email("inavlid email format"),
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format"
+    )
 });
 
 interface SignupData {
@@ -44,6 +47,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SignupData>({
     resolver: yupResolver(signupSchema),
@@ -54,6 +58,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
 
   const onSubmit = (data: SignupData) => {
     console.log(data);
+    reset();
   };
 
   return (
@@ -110,7 +115,8 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           helperText={errors.username ? errors.username.message : ""}
           type="text"
           variant="standard"
-          sx={{   
+          sx={{
+            width:'100%',   
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -141,6 +147,7 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           autoComplete="current-password"
           variant="standard"
           sx={{
+            width:'100%',
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },
@@ -175,9 +182,10 @@ export const Signup: FC<SignupProps> = ({setIsSignup}) => {
           label="Email"
           error={!!errors.email}
           helperText={errors.email ? errors.email.message : ""}
-          type="email"
+          type="text"
           variant="standard"
           sx={{   
+            width:'100%',
             "& .MuiInputLabel-root": { color: "black" },
             "& .MuiInputBase-root": { color: "black" },
             "& .MuiInput-underline:before": { borderBottomColor: "black" },

@@ -4,11 +4,14 @@ import adam.dev.liveCode.entity.User;
 import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.security.jwt.JwtUtil;
 import adam.dev.liveCode.security.jwt.model.AuthRequest;
-import adam.dev.liveCode.security.jwt.model.AuthResponse;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,8 +55,15 @@ public class AuthController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
+        ResponseCookie cookie = ResponseCookie.from("authToken", jwt)
+                .httpOnly(true)
+                .path("/")
+                .sameSite("Lax")
+                .build();
 
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .body("Login was successful");
     }
 
     @PostMapping("/signup")

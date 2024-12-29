@@ -16,6 +16,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import "./Login.css";
+import axios from "axios";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -40,6 +41,7 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginData>({
     resolver: yupResolver(loginSchema),
@@ -48,9 +50,10 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data: LoginData) => {
-    console.log(data);
-  };
+  const onSubmit = async (data: LoginData) => {
+        reset(); 
+    } 
+
 
   return (
     <Box
@@ -74,6 +77,7 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
       >
         <Box
           sx={{
+            
             padding: "3px 10px",
             boxShadow: "0 0 15px 5px rgba(173, 216, 230, 0.7)",
             transition: "box-shadow 0.3s ease-in-out",
@@ -89,6 +93,7 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
           <Typography
             variant="h4"
             sx={{
+              
               fontWeight: "bold",
               color: "white",
               fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
@@ -109,6 +114,7 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
           type="text"
           variant="standard"
           sx={{
+            width:'100%',
             "& .MuiInputLabel-root": { color: "white" },
             "& .MuiInputBase-root": { color: "white" },
             "& .MuiInput-underline:before": { borderBottomColor: "white" },
@@ -139,6 +145,7 @@ export const Login: FC<LoginProps> = ({setIsSignup}) => {
           autoComplete="current-password"
           variant="standard"
           sx={{
+            width:'100%',
             "& .MuiInputLabel-root": { color: "white" },
             "& .MuiInputBase-root": { color: "white" },
             "& .MuiInput-underline:before": { borderBottomColor: "white" },
