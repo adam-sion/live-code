@@ -13,7 +13,7 @@ export const Home: FC = () => {
         alignItems: 'center',
         justifyContent: 'center',
         p: { xs: 2, md: 5 },
-        
+        marginTop:'100px'
     
     }}
 >
