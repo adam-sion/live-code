@@ -102,8 +102,6 @@ export const Signup: FC<SignupProps> = ({ setIsSignup }) => {
           <Typography
             variant="h4"
             sx={{
-            
-              fontSize: "1.5em",
               fontWeight: "bold",
               color: "black",
               fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
