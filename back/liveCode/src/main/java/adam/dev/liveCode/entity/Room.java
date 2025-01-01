@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -21,10 +21,10 @@ public class Room {
     private String name;
 
     @OneToMany(mappedBy = "room")
-    private List<RoomUser> roomUsers;
+    private Set<RoomUser> roomUsers;
 
     @OneToMany(mappedBy = "requestedRoom")
-    private List<RoomUserRequest> roomUserRequests;
+    private Set<RoomUserRequest> roomUserRequests;
 
     @OneToOne(mappedBy = "originalRoom")
     private RoomCode roomCode;
