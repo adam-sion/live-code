@@ -58,6 +58,7 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("authToken", jwt)
                 .httpOnly(true)
                 .path("/")
+                .secure(true)
                 .sameSite("Lax")
                 .build();
 

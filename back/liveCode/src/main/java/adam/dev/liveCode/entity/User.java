@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,13 +31,13 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user")
-    private Set<RoomUser> roomUsers;
+    private List<RoomUser> roomUsers;
 
     @OneToMany(mappedBy = "requestedUser")
-    private Set<RoomUserRequest> roomUserRequests;
+    private List<RoomUserRequest> roomUserRequests;
 
     @OneToMany(mappedBy = "editor")
-    private Set<CodeLineOperation> codeLineOperations;
+    private List<CodeLineOperation> codeLineOperations;
 
     public User() {}
 

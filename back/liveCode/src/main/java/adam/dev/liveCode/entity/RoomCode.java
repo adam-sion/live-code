@@ -2,6 +2,7 @@ package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class RoomCode {
     private String language;
 
     @OneToMany(mappedBy = "roomCode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CodeLine> codeLines;
+    private List<CodeLine> codeLines;
 
     public Room getOriginalRoom() {
         return originalRoom;
@@ -41,11 +42,11 @@ public class RoomCode {
         this.language = language;
     }
 
-    public Set<CodeLine> getCodeLines() {
+    public List<CodeLine> getCodeLines() {
         return codeLines;
     }
 
-    public void setCodeLines(Set<CodeLine> codeLines) {
+    public void setCodeLines(List<CodeLine> codeLines) {
         this.codeLines = codeLines;
     }
 
