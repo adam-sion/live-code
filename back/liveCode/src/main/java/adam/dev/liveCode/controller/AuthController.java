@@ -59,6 +59,7 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/")
                 .sameSite("Lax")
+                .secure(true)
                 .build();
 
         return ResponseEntity.ok()
