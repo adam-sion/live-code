@@ -66,10 +66,10 @@ const {login} = useAuth();
       onSubmit={handleSubmit(onSubmit)}
       sx={{
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginBottom:'5px'
       }}
-      width={"100%"}
-      height={"100%"}
+      width={"95%"}
     >
       <Stack
         direction="column"
@@ -96,7 +96,7 @@ const {login} = useAuth();
           }}
         >
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
               
               fontWeight: "bold",
