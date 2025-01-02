@@ -30,24 +30,24 @@ private CustomUserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+if (!request.getRequestURI().equals("/auth/**")) {
+    String jwt = getJwtFromCookies(request);
 
-            String jwt = getJwtFromCookies(request);
+    if (jwt != null) {
+        String username = jwtUtil.extractUserName(jwt);
 
-            if (jwt != null) {
-                String username = jwtUtil.extractUserName(jwt);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                    if (jwtUtil.validateToken(jwt, userDetails)) {
-                        UsernamePasswordAuthenticationToken authenticationToken =
-                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
-                }
+            if (jwtUtil.validateAuthToken(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
-
+    }
+}
         filterChain.doFilter(request, response);
     }
 

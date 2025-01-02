@@ -34,28 +34,43 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            // Log error, rethrow or handle appropriately
             throw new IllegalArgumentException("Invalid or expired JWT token");
         }
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
-        return createToken(claims, userDetails.getUsername());
+        return createRefreshToken(claims, userDetails.getUsername());
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createRefreshToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date((System.currentTimeMillis())))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public String generateAuthToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+
+        return createAuthToken(claims, userDetails.getUsername());
+    }
+
+    private String createAuthToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date((System.currentTimeMillis())))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public boolean validateAuthToken(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
 
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);

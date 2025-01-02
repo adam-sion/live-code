@@ -4,24 +4,21 @@ import adam.dev.liveCode.entity.User;
 import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.security.jwt.JwtUtil;
 import adam.dev.liveCode.security.jwt.model.AuthRequest;
+import adam.dev.liveCode.security.jwt.model.AuthResponse;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -52,20 +49,52 @@ public class AuthController {
             throw new HttpMessageNotReadableException("Request body is missing or malformed");
         }
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails);
-        ResponseCookie cookie = ResponseCookie.from("authToken", jwt)
+
+        final String jwt = jwtUtil.generateAuthToken(userDetails);
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+
+        ResponseCookie authCookie = ResponseCookie.from("authToken", jwt)
                 .httpOnly(true)
                 .path("/")
-                .sameSite("Lax")
                 .secure(true)
+                .sameSite("Lax")
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .secure(true)
+                .sameSite("Lax")
                 .build();
 
         return ResponseEntity.ok()
-                .header("Set-Cookie", cookie.toString())
+                .header("Set-Cookie", authCookie.toString())
+                .header("Set-Cookie", refreshCookie.toString())
                 .body("Login was successful");
     }
+
+    @PostMapping("/checkLoggedIn")
+    public ResponseEntity<String> checkLoggedIn(@CookieValue String authToken) {
+
+        try {
+            String username = jwtUtil.extractUserName(authToken);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if (jwtUtil.validateAuthToken(authToken, userDetails)) {
+                return new ResponseEntity<>("User is logged in", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User userToRegister) {
@@ -77,6 +106,23 @@ public class AuthController {
         userService.createUser(userToRegister);
 
         return ResponseEntity.ok("User registered successfully!");
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@CookieValue String refreshToken) {
+        String username = jwtUtil.extractUserName(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final String authToken = jwtUtil.generateAuthToken(userDetails);
+
+        ResponseCookie cookie = ResponseCookie.from("authToken", authToken)
+                .httpOnly(true)
+                .path("/")
+                .secure(true)
+                .sameSite("Lax")
+                .build();
+
+        return ResponseEntity.ok().header("Set-Cookie", cookie.toString())
+                .body("Refresh token was successful");
     }
 
     @RequestMapping("/**")

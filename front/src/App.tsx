@@ -6,16 +6,17 @@ import { router } from './routes/Routes.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoadingProvider } from './contexts/loadingContext.tsx'
 
 const App:FC = ()=> {
   return (
-    <>
+    <LoadingProvider>
     <AuthProvider>
     <RouterProvider router={router}>
     </RouterProvider>
-    </AuthProvider>
     <ToastContainer position='bottom-right' limit={2} autoClose={1500}/>
-   </>
+    </AuthProvider>
+    </LoadingProvider>
   )
 }
 

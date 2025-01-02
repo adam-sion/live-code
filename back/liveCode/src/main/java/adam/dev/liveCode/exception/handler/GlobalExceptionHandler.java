@@ -2,6 +2,7 @@ package adam.dev.liveCode.exception.handler;
 
 import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.exception.UnauthorizedAccessException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -10,11 +11,13 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.nio.file.AccessDeniedException;
+import java.security.SignatureException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -63,11 +66,30 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestCookie(MissingRequestCookieException ex) {
+        ErrorResponse error = new ErrorResponse("Bad Request", "Required cookie is missing: " + ex.getCookieName());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         ErrorResponse error = new ErrorResponse("Unauthorized", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwt(ExpiredJwtException ex) {
+        ErrorResponse error = new ErrorResponse("Unauthorized", "JWT has expired. Please log in again.");
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidJwt(SignatureException ex) {
+        ErrorResponse error = new ErrorResponse("Unauthorized", "Invalid JWT signature.");
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedAccess(UnauthorizedAccessException ex) {

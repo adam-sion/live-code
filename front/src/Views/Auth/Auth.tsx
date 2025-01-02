@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC} from "react";
 import { useState } from 'react';
 import {Box, Grid} from "@mui/material";
 import "./Auth.css";
@@ -8,6 +8,7 @@ import darklogo from "../../assets/newdarklogo.png"
 import cppimg from "../../assets/cppImg.png"
 import javaimg from "../../assets/JavaImg.png"
 import pyimg from "../../assets/PythonImg.png"
+
 export const Auth: FC = () => {
     const [isSignup, setIsSignup] = useState(false);
 
