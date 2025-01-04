@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -30,7 +31,8 @@ private CustomUserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-if (!request.getRequestURI().equals("/auth/**")) {
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        if (!pathMatcher.match("/auth/**", request.getRequestURI())){
     String jwt = getJwtFromCookies(request);
 
     if (jwt != null) {
