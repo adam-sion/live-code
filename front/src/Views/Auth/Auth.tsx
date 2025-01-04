@@ -14,7 +14,7 @@ export const Auth: FC = () => {
 
   return (
     <div className="container">
-        <Box sx={{ width:{sm:'60vw',xs:'90vw', xl:'42vw'}, maxHeight: '50vh'}}>
+        <Box sx={{ width:{sm:'60vw',xs:'90vw', xl:'30vw'}, maxHeight: '50vh'}}>
       <div className={`glowing-box ${isSignup? 'second-background' : 'first-background'}`}>
         <div className='box left-box'>
           {

@@ -1,21 +1,19 @@
 import { Box, Button, Typography } from "@mui/material";
 import { FC } from "react";
 import collab from "../../assets/collab.png"
-import { Code } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 export const Home: FC = () => {
   return (
-    <Box sx ={{backgroundColor:'black', height:'100vh', paddingTop:{md:'140px', sm:'150px'}, display:'flex', justifyContent:'center'}}>
+    <Box sx ={{backgroundColor:'black', height:'100vh', display:'flex', justifyContent:'center'}}>
     <Box
     sx={{
         width: '80vw',
-        height: { xs: '110vh', sm: '90vh', md: '50vh' },
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
         alignItems: 'center',
         justifyContent: 'center',
         p: { xs: 2, md: 5 },
-        overflow: 'hidden',
+        
     
     }}
 >
@@ -26,7 +24,7 @@ export const Home: FC = () => {
             display: 'flex',
             flexDirection: 'column',
             textAlign: { md: 'left' },
-            width:'30%'
+            width:{md:'30%'}
         }}
         component="div"
     >
@@ -45,7 +43,7 @@ export const Home: FC = () => {
 
         <Box
             sx={{
-                fontSize: { xs: '4vw', sm: '4vw', md: '2vw' },
+                fontSize: {sm: '4vw', md: '2vw' },
                 m: 1,
                 color: 'white',
                 fontFamily: '"Poppins", sans-serif',
@@ -61,7 +59,7 @@ export const Home: FC = () => {
                 m: 1,
                 color: 'white',
                 fontFamily: '"Poppins", sans-serif',
-             width:'100%'
+           
                 
             }}>
 Allow your users to collaborate in any proggraming language. 
