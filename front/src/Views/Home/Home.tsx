@@ -68,7 +68,7 @@ Allow your users to collaborate in any proggraming language.
 Integrate live carets and cursors to show who is typing, enjoy coding along your fellas without any headaches.
         </Box>
         <Box sx={{paddingTop:'20px'}}>
-            <Link to={"/auth"}>
+            <Link to={"/code"}>
             
         <Button
             type="submit"
