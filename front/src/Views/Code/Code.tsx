@@ -1,21 +1,24 @@
 import { Editor } from "@monaco-editor/react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useLoading } from "../../contexts/loadingContext";
 
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
+
 
   const handleEditorChange = (value: string | undefined) => {
     setCode(value || "");
   };
 
   return (
+    
     <div
       style={{
         height: "100vh", 
         width: "100vw", 
         margin: 0, 
         padding: 0, 
-        overflow: "hidden",
+      
       }}
     >
       <Editor
