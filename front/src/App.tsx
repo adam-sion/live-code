@@ -7,10 +7,12 @@ import { AuthProvider } from './contexts/AuthContext.tsx'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoadingProvider } from './contexts/loadingContext.tsx'
+import { Box } from '@mui/material'
 
 
 const App:FC = ()=> {
   return (
+   
     <LoadingProvider>
     <AuthProvider>
     <RouterProvider router={router}/>
