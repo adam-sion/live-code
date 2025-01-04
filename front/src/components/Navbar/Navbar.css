@@ -1,0 +1,12 @@
+.nav-link {
+    text-decoration: none;
+    color: black;
+    background-color: transparent; 
+    border-radius: 12px;
+    transition: background-color 0.4s ease; 
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(37, 44, 46, 0.3); 
+  }
+  
