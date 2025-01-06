@@ -1,4 +1,4 @@
-package adam.dev.liveCode.repository;
+package adam.dev.liveCode.dao.repository;
 
 import adam.dev.liveCode.entity.CodeLineDetails;
 import jakarta.transaction.Transactional;

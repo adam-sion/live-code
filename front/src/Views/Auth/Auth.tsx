@@ -18,7 +18,6 @@ export const Auth: FC = () => {
       <div className={`glowing-box ${isSignup? 'second-background' : 'first-background'}`}>
         <div className='box left-box'>
           {
-            
              isSignup ? <Signup setIsSignup={setIsSignup}></Signup> : <Login setIsSignup={setIsSignup}/>
           }
         </div>

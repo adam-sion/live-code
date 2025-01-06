@@ -17,13 +17,14 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const api = axios.create({ baseURL: `${import.meta.env.VITE_SERVER_URL}/auth` });
+  const authApi = axios.create({ baseURL: `${import.meta.env.VITE_SERVER_URL}/auth` });
+  const userApi = axios.create({baseURL: `${import.meta.env.VITE_SERVER_URL}/users`});
    const {setIsLoading} = useLoading();
  
   const checkAuth = async () => {
     try {
      
-      const response = await api.post('/checkLoggedIn',{}, { withCredentials: true });
+      const response = await userApi.get('/checkLoggedIn', { withCredentials: true });
       if (response.status === 200) {
        return true;
       }
@@ -36,7 +37,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
    useEffect( () => {
    checkAuth();
-    const responseInterceptor = api.interceptors.response.use(
+    const responseInterceptor = authApi.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
@@ -50,9 +51,9 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
           try {
           
-            await api.post("/refresh-token");
+            await authApi.post("/refresh-token");
         
-            return api(originalRequest);
+            return authApi(originalRequest);
           } catch (refreshError) {
             toast.error("Session expired. Please log in again.");
             return Promise.reject(refreshError);
@@ -65,14 +66,14 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
     return () => {
 
-      api.interceptors.response.eject(responseInterceptor);
+      authApi.interceptors.response.eject(responseInterceptor);
     };
   }, []);
   
    const login = async (user:LoginData)=> {
     try {
       setIsLoading(true);
-    await api.post('/login', user, {withCredentials:true});
+    await authApi.post('/login', user, {withCredentials:true});
      toast.success("signed in successfully!");
     return true;
     } catch(error) {
@@ -86,7 +87,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const signup = async (user:SignupData)=> {
     try {
       setIsLoading(true);
-      await api.post('/signup', user);
+      await authApi.post('/signup', user);
       toast.success("signed up successfully!");
     return true;
     } catch(error) {

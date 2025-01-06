@@ -1,7 +1,7 @@
 package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.entity.RoomCode;
-import adam.dev.liveCode.repository.RoomCodeRepository;
+import adam.dev.liveCode.dao.repository.RoomCodeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 

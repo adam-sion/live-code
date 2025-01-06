@@ -1,12 +1,17 @@
 package adam.dev.liveCode.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 
+import java.util.List;
 import java.util.Set;
 
 
+@Getter
 @Entity
 @Table(name="users")
 public class User {
@@ -19,6 +24,7 @@ public class User {
     @Column
     private String username;
 
+    @JsonIgnore
     @NotNull(message = "Password cannot be null")
     @Column
     private String password;
@@ -30,13 +36,13 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user")
-    private Set<RoomUser> roomUsers;
+    private List<RoomUser> roomUsers;
 
     @OneToMany(mappedBy = "requestedUser")
-    private Set<RoomUserRequest> roomUserRequests;
+    private List<RoomUserRequest> roomUserRequests;
 
     @OneToMany(mappedBy = "editor")
-    private Set<CodeLineOperation> codeLineOperations;
+    private List<CodeLineOperation> codeLineOperations;
 
     public User() {}
 
@@ -46,6 +52,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
     public String getEmail() {

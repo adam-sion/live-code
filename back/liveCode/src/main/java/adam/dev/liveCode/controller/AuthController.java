@@ -53,7 +53,6 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-
         final String jwt = jwtUtil.generateAuthToken(userDetails);
         final String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
@@ -75,26 +74,8 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header("Set-Cookie", authCookie.toString())
                 .header("Set-Cookie", refreshCookie.toString())
-                .body("Login was successful");
+                .body("login success");
     }
-
-    @PostMapping("/checkLoggedIn")
-    public ResponseEntity<String> checkLoggedIn(@CookieValue String authToken) {
-
-        try {
-            String username = jwtUtil.extractUserName(authToken);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            if (jwtUtil.validateAuthToken(authToken, userDetails)) {
-                return new ResponseEntity<>("User is logged in", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User userToRegister) {

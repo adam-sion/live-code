@@ -1,7 +1,7 @@
 package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.entity.CodeLine;
-import adam.dev.liveCode.repository.CodeLineRepository;
+import adam.dev.liveCode.dao.repository.CodeLineRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
