@@ -15,6 +15,11 @@ public class RoomUserId implements Serializable {
 
     public RoomUserId() {}
 
+    public RoomUserId(Long roomId, Long userId) {
+        this.roomId = roomId;
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

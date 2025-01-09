@@ -63,6 +63,11 @@ public class UserController {
         return user;
     }
 
+    @GetMapping("/room/{roomId}")
+    public List<User> getUsersByRoomId(@PathVariable Long roomId) {
+        return userService.getUsersByRoomId(roomId);
+    }
+
     @RequestMapping("/**")
     public ResponseEntity<ErrorResponse> handleInvalidEndpoint() {
         return new ResponseEntity<>(new ErrorResponse("Not found", "endpoint not found"), HttpStatus.NOT_FOUND);  // Correct order

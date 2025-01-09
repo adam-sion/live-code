@@ -3,7 +3,7 @@ package adam.dev.liveCode.service;
 import adam.dev.liveCode.entity.CodeLine;
 import adam.dev.liveCode.entity.CodeLineDetails;
 import adam.dev.liveCode.entity.CodeLineOperation;
-import adam.dev.liveCode.dao.repository.CodeLineOperationRepository;
+import adam.dev.liveCode.dao.CodeLineOperationRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;

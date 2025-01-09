@@ -1,17 +1,15 @@
 package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
 @NoArgsConstructor
 @Table(name="room_user")
 public class RoomUser {
 
    @EmbeddedId
-   RoomUserId id;
+   private RoomUserId id;
 
     @ManyToOne
     @MapsId("roomId")
@@ -27,6 +25,10 @@ public class RoomUser {
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User getUser() {
+     return user;
+    }
 
 }
 
