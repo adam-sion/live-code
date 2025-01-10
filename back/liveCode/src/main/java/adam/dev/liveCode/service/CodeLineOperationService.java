@@ -28,7 +28,6 @@ public class CodeLineOperationService {
     @Transactional
     public void handleCodeLineOperation(CodeLineOperation operation) {
         createCodeLineOperation(operation);
-        CodeLine codeLine = new CodeLine();
         CodeLineDetails codeLineDetails = new CodeLineDetails();
 
         switch (operation.getOperationType()) {
@@ -36,6 +35,7 @@ public class CodeLineOperationService {
 
                 codeLineDetails.setContent(operation.getNewContent());
                 codeLineDetails.setLineNumber(operation.getLineNumber());
+                CodeLine codeLine = new CodeLine();
                 codeLine.setCodeLineDetails(codeLineDetails);
                 codeLine.setRoomCode(operation.getCodeLine().getRoomCode());
                 codeLine.setCodeLineDetails(codeLineDetails);

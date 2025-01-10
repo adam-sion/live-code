@@ -94,7 +94,7 @@ public class AuthController {
         String username = jwtUtil.extractUserName(refreshToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String authToken = jwtUtil.generateAuthToken(userDetails);
-
+        System.out.println("refresh token was asked damnnnnnnnnnnnnnnnnnnnnn");
         ResponseCookie cookie = ResponseCookie.from("authToken", authToken)
                 .httpOnly(true)
                 .path("/")
