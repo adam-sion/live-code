@@ -51,7 +51,7 @@ export const Code: FC = () => {
               {progLangs.map((currProgLang) => (
                 <MenuItem key={currProgLang.name} value={currProgLang.name}>
                   <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    {currProgLang.name}{" "}
+            
                     <img style={{ marginLeft: "3px" }} height="20px" src={currProgLang.img} alt="" />
                   </Box>
                 </MenuItem>
