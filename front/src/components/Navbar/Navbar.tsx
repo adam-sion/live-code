@@ -8,7 +8,7 @@ export const Navbar: FC = () => {
   return (
     <AppBar position="fixed" sx={{ height: 64, backgroundColor: "transparent",boxShadow: "none", marginTop:'50px' }}>
       <Toolbar sx={{ justifyContent: "center"}}>
-        <Box sx={{borderRadius: '30px', background:'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent:'space-between', flexDirection:{xs:'col', md:'row'}, alignItems:'center', padding:2, gap:12}}>
+        <Box sx={{borderRadius: '30px', background:'rgba(255, 255, 255, 0.8)', display: 'flex', justifyContent:'space-between', flexDirection:{xs:'column', md:'row'}, alignItems:'center', padding:2, gap:{md:12, xs:1}}}>
           <Box
             component="img"
             src={darklogo}
