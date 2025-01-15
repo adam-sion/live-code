@@ -30,7 +30,7 @@ export const Home: FC = () => {
     >
         <Box
             sx={{
-                fontSize: { xs: '12vw', sm: '9vw', md: '3vw' },
+                fontSize: {md:'60px', sm:'40px', xs:'40px'},
                 m: 1,
                 color: 'white',
                 fontFamily: 'Gill Sans, Verdana',
@@ -43,7 +43,7 @@ export const Home: FC = () => {
 
         <Box
             sx={{
-                fontSize: {sm: '4vw', md: '2vw' },
+                fontSize: {md:'40px', sm:'25px' , xs:'25px'},
                 m: 1,
                 color: 'white',
                 fontFamily: '"Poppins", sans-serif',
@@ -55,7 +55,7 @@ export const Home: FC = () => {
            Anywhere
         </Box>
         <Box  sx={{
-                fontSize: { xs: '2vw', sm: '2vw', md: '1vw' },
+                fontSize: {md:'20px', sm:'10px'},
                 m: 1,
                 color: 'white',
                 fontFamily: '"Poppins", sans-serif',
@@ -76,7 +76,7 @@ Integrate live carets and cursors to show who is typing, enjoy coding along your
               borderRadius: 20,
              
               fontWeight: "bold",
-              fontSize: { xs: '1.5vw', sm: '1.7vw', md: '0.9vw' },
+              fontSize: {md:'15px', sm:'10px'},
               background: "linear-gradient(55deg,rgb(57, 211, 139), #004E95)",
               color: "white",
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",

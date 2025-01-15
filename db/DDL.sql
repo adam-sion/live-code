@@ -49,22 +49,6 @@ DROP TABLE IF EXISTS live_code.room_code CASCADE;
 CREATE TABLE live_code.room_code (
     id SERIAL PRIMARY KEY,
     room_id BIGINT NOT NULL REFERENCES live_code.rooms(id) ON DELETE CASCADE,
-    language VARCHAR(50) NOT NULL
-);
-
-
-DROP TABLE IF EXISTS live_code.code_line_details CASCADE;
-CREATE TABLE live_code.code_line_details (
-    id SERIAL PRIMARY KEY,
-    content TEXT NOT NULL,
-    line_number INT NOT NULL
-);
-
-DROP TABLE IF EXISTS live_code.code_line CASCADE;
-CREATE TABLE live_code.code_line (
-    id SERIAL PRIMARY KEY,
-    room_code_id BIGINT NOT NULL REFERENCES live_code.room_code(id) ON DELETE CASCADE,
-    user_id BIGINT NOT NULL REFERENCES live_code.users(id) ON DELETE CASCADE,
-    code_line_details_id BIGINT NOT NULL REFERENCES live_code.code_line_details(id) ON DELETE CASCADE,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    language VARCHAR(50) NOT NULL,
+    content TEXT NOT NULL
 );

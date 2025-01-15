@@ -23,8 +23,16 @@ public class RoomCode {
     @Column
     private String language;
 
-    @OneToMany(mappedBy = "roomCode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CodeLine> codeLines;
+    @Column
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Room getOriginalRoom() {
         return originalRoom;
@@ -40,14 +48,6 @@ public class RoomCode {
 
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    public List<CodeLine> getCodeLines() {
-        return codeLines;
-    }
-
-    public void setCodeLines(List<CodeLine> codeLines) {
-        this.codeLines = codeLines;
     }
 
     public Long getId() {

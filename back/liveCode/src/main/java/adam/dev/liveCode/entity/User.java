@@ -1,6 +1,7 @@
 package adam.dev.liveCode.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class User {
     @Column
     private String username;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Password cannot be null")
     @Column
     private String password;
@@ -40,9 +41,6 @@ public class User {
 
     @OneToMany(mappedBy = "requestedUser")
     private List<RoomUserRequest> roomUserRequests;
-
-    @OneToMany(mappedBy = "editor")
-    private List<CodeLineOperation> codeLineOperations;
 
     public User() {}
 
