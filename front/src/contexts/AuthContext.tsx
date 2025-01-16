@@ -51,7 +51,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
           try {
           
-            await authApi.post("/refresh-token");
+            const {data} = await authApi.post("/refresh-token");
+            console.log(`refresh token was requesteddddddd, response : =>=>=> ${data}`)
         
             return authApi(originalRequest);
           } catch (refreshError) {
