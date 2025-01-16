@@ -23,4 +23,7 @@ public class RoomUserRequest {
     @JoinColumn(name="user_id")
     private User requestedUser;
 
+    @Column
+    private String status;
+
 }

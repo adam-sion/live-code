@@ -23,7 +23,7 @@ public class RoomCode {
     @Column
     private String language;
 
-    @Column
+    @Column(name = "content")
     private String code;
 
     public String getCode() {

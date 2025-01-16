@@ -23,18 +23,9 @@ CREATE TABLE live_code.room_user (
     room_id BIGINT NOT NULL REFERENCES live_code.rooms(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL REFERENCES live_code.users(id) ON DELETE CASCADE,
     role VARCHAR(50) CHECK(role IN ('user', 'admin')) DEFAULT 'user',
+    last_active_at TIMESTAMP,
     PRIMARY KEY (room_id, user_id)
 );
-
-
-DROP TABLE IF EXISTS live_code.active_room_user CASCADE;
-CREATE TABLE live_code.active_room_user (
-    room_id BIGINT NOT NULL REFERENCES live_code.rooms(id) ON DELETE CASCADE,
-    user_id BIGINT NOT NULL REFERENCES live_code.users(id) ON DELETE CASCADE,
-    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (room_id, user_id)
-);
-
 
 DROP TABLE IF EXISTS live_code.room_user_requests CASCADE;
 CREATE TABLE live_code.room_user_requests (
