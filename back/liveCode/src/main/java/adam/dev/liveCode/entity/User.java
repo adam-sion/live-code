@@ -36,6 +36,7 @@ public class User {
     @Column
     private String email;
 
+    @JsonProperty
     @OneToMany(mappedBy = "user")
     private List<RoomUser> roomUsers;
 

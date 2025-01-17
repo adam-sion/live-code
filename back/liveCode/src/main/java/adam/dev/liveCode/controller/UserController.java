@@ -58,9 +58,7 @@ public class UserController {
 
     @GetMapping("/me")
     public User getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findByUsername(userDetails.getUsername());
-
-        return user;
+        return userService.findByUsername(userDetails.getUsername());
     }
 
     @GetMapping("/room/{roomId}")
