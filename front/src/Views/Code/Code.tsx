@@ -178,10 +178,10 @@ const [count, setCount] = useState(6);
   return (
     <Box
       sx={{
-        height: "100vh",
+       height:'100%',
         display: "flex",
         flexDirection: "column",
-        backgroundColor:"rgba(0,0,0,0.1)"
+        backgroundColor:"rgba(0,0,0,0.1)",
       }}
     >
       <AppBar
@@ -192,7 +192,7 @@ const [count, setCount] = useState(6);
           background: "rgba(58, 47, 143, 0.8)",
           display: "flex",
           alignItems: { dm: "center", md: "start" },
-          flexDirection: { md: "row", sm: "column" },
+          flexDirection: { md: "row"},
         }}
       >
         <Toolbar sx={{ justifyContent: "start", gap: {md:15, sm:5, xs:3}, width: '50%' }}>
@@ -226,14 +226,15 @@ const [count, setCount] = useState(6);
   sx={{
     flexGrow: 1,
     display: "flex", // Enable flexbox for equal width
-    flexDirection: "row", // Align children side by side
-    height: "100%",
-    gap:'15px'
+    flexDirection: { xs: "column", sm: "column", md: "column", lg: "row" },
+
+    gap:'15px',
+    
   }}
 >
   <Box
     sx={{
-      flex: 1, // Take equal width
+      flex: 1 // Take equal width
     }}
   >
     <Editor
@@ -261,23 +262,21 @@ const [count, setCount] = useState(6);
       padding:3
     }}
   >
-   <Box sx = {{ display:"flex", padding:2, paddingBottom:5, gap:10}}>
+   <Box sx = {{ display:"flex", flexWrap:'wrap', justifyContent:'center', padding:2, paddingBottom:5, gap:10}}>
    
  <Box sx={{display:'flex', flexDirection:'column', gap:1.5}}>
  <Box
-            sx={{
-              
+            sx={{   
               textAlign:'center',
-              borderRadius:'12px',
-      
-                fontSize: {md:'20px', sm:'10px', xs:'10px'},
+                fontSize: '20px',
                 m: 1,
                 color: 'black',
                 padding:1,
               boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
+              borderRadius:'12px',
                 fontFamily: 'Gill Sans, Verdana',
                 fontWeight: 'bold',
-                textShadow: '2px 2px 4px rgba(46, 44, 44, 0.2)',
+               
             }}
         >
            My Rooms
@@ -400,15 +399,14 @@ const [count, setCount] = useState(6);
               
               textAlign:'center',
               borderRadius:'12px',
-      
-                fontSize: {md:'20px', sm:'10px', xs:'10px'},
+              fontSize: '20px',
                 m: 1,
                 color: 'black',
                 padding:1,
               boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
                 fontFamily: 'Gill Sans, Verdana',
                 fontWeight: 'bold',
-                textShadow: '2px 2px 4px rgba(46, 44, 44, 0.2)',
+             
             }}
         >
            Users requests
@@ -430,7 +428,8 @@ const [count, setCount] = useState(6);
 
    </Box>
    
-   <Box sx = {{height:"50%", backgroundColor:"white"}}>
+   <Box sx = {{height:"50%",  boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
+              borderRadius:'12px',}}>
    <Divider
   sx={{
     borderBottomWidth: '10px',  

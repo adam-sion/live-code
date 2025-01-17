@@ -17,9 +17,9 @@ const Layout = () => {
   return (
     <>
       {!shouldHideNavbar && <Navbar />}
-      <main>
+     
         <Outlet /> {/* Render nested routes here */}
-      </main>
+  
     </>
   );
 };
