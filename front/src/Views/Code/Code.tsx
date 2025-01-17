@@ -11,6 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
+import { User } from "../../types/User";
+import { useAuth } from "../../contexts/AuthContext";
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -70,7 +72,6 @@ const IOSSwitch = styled((props: SwitchProps) => (
     }),
   },
 }));
-
 
 const renderRow = (props: ListChildComponentProps)=> {
   const { index, style } = props;
@@ -139,6 +140,7 @@ export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
 const [count, setCount] = useState(6);
+const {user} = useAuth();
 
 
 
@@ -192,12 +194,12 @@ const [count, setCount] = useState(6);
           position: "static",
           background: "rgba(58, 47, 143, 0.8)",
           display: "flex",
-          alignItems: { sm: "center", md: "start" },
+          alignItems: {xs:'center',sm: "center", md: "start" },
           flexDirection: { md: "row"},
           
         }}
       >
-        <Toolbar sx={{ justifyContent: "start", gap: {md:15, sm:5, xs:3}, width: '50%' }}>
+        <Toolbar sx={{ justifyContent: "start", gap: {md:15, sm:5, xs:3}, width: '80%' }}>
           <Box>
             <Select
               labelId="demo-simple-select-label"
@@ -223,7 +225,24 @@ const [count, setCount] = useState(6);
           </Button>
           <img src={darklogo} alt="" />
         </Toolbar>
-        <Toolbar sx={{ justifyContent:'center', gap: {md:10, sm:5, xs:3},width: '40%' }}>
+        <Toolbar sx={{ justifyContent:'center', gap: {md:10, sm:5, xs:3},width: '80%' }}>
+        <Box
+            sx={{   
+              textAlign:'center',
+                fontSize: '20px',
+                m: 1,
+                color: 'black',
+                padding:1,
+              boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
+              borderRadius:'12px',
+                fontFamily: 'Gill Sans, Verdana',
+              
+               
+            }}
+        >
+           Welcome back, {user?.username}
+          
+        </Box>
         <Link to={"/"}>
         <IconButton aria-label="confirm">
           <Home sx={{fontSize:'30px'}}/>
@@ -294,6 +313,7 @@ const [count, setCount] = useState(6);
             }}
         >
            My Rooms
+          
         </Box>
 
  <FixedSizeList

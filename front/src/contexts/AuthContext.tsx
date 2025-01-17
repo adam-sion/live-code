@@ -4,10 +4,13 @@ import { LoginData } from "../types/LoginData";
 import { SignupData } from "../types/SignupData";
 import { toast } from "react-toastify";
 import { useLoading } from "./loadingContext";
+import { User } from "../types/User";
+
 interface AuthContextType {
   login: (user: LoginData) => Promise<boolean|undefined>;
   signup: (user:SignupData)=> Promise<boolean>;
-  checkAuth: ()=> Promise<boolean|undefined>
+  user: User|undefined;
+  checkAuth: ()=> Promise<boolean|undefined>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,6 +23,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const authApi = axios.create({ baseURL: `${import.meta.env.VITE_SERVER_URL}/auth` });
   const userApi = axios.create({baseURL: `${import.meta.env.VITE_SERVER_URL}/users`});
    const {setIsLoading} = useLoading();
+   const [user, setUser] = useState<User|undefined>(undefined);
  
   const checkAuth = async () => {
     try {
@@ -34,9 +38,25 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const getUser = async () => {
+    try {
+     
+      const {data,status} = await userApi.get('/me', { withCredentials: true });
+      if (status === 200) {
+        setUser(data);
+       return true;
+      }
+
+
+    } catch (error) {
+      console.error('Error checking authentication', error);
+      return false;
+    }
+  };
 
    useEffect( () => {
    checkAuth();
+   getUser();
     const responseInterceptor = authApi.interceptors.response.use(
       (response) => response,
       async (error) => {
@@ -100,7 +120,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ login, signup, checkAuth}}>
+    <AuthContext.Provider value={{ login, signup, checkAuth, user}}>
       {children}
     </AuthContext.Provider>
   );
