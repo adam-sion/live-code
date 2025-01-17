@@ -3,13 +3,14 @@ import { FC, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Toolbar, Typography } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Bolt } from "@mui/icons-material";
+import { Bolt, Home, Login } from "@mui/icons-material";
 import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
+import { Link } from "react-router-dom";
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -191,8 +192,9 @@ const [count, setCount] = useState(6);
           position: "static",
           background: "rgba(58, 47, 143, 0.8)",
           display: "flex",
-          alignItems: { dm: "center", md: "start" },
+          alignItems: { sm: "center", md: "start" },
           flexDirection: { md: "row"},
+          
         }}
       >
         <Toolbar sx={{ justifyContent: "start", gap: {md:15, sm:5, xs:3}, width: '50%' }}>
@@ -220,6 +222,18 @@ const [count, setCount] = useState(6);
             Run
           </Button>
           <img src={darklogo} alt="" />
+        </Toolbar>
+        <Toolbar sx={{ justifyContent:'center', gap: {md:10, sm:5, xs:3},width: '40%' }}>
+        <Link to={"/"}>
+        <IconButton aria-label="confirm">
+          <Home sx={{fontSize:'30px'}}/>
+        </IconButton>
+        </Link>
+        <Link to={"/auth"}>
+        <IconButton aria-label="confirm">
+          <Login sx={{fontSize:'30px'}}/>
+        </IconButton>
+        </Link>
         </Toolbar>
       </AppBar>
       <Box
@@ -438,7 +452,7 @@ const [count, setCount] = useState(6);
     mb: 4,
   }}
 >
-  <Typography variant="h3" sx={{fontFamily: '"Comic Sans MS", "Comic Sans", cursive'}}>Compiler Result</Typography>
+  <Typography sx={{fontSize:'40px',fontFamily: '"Comic Sans MS", "Comic Sans", cursive'}}>Compiler Result</Typography>
 </Divider>
 </Box>
 </Box>
