@@ -1,5 +1,7 @@
 package adam.dev.liveCode.controller;
 
+import adam.dev.liveCode.dto.CreateRoomDTO;
+import adam.dev.liveCode.entity.Room;
 import adam.dev.liveCode.service.RoomService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +21,8 @@ public class RoomController {
     }
 
     @PostMapping
-    public String addRoom(@RequestBody String roomName, @AuthenticationPrincipal UserDetails userDetails) {
-        roomService.add(roomName, userDetails.getUsername());
-
-        return "room added successfully";
+    public Room addRoom(@RequestBody CreateRoomDTO room, @AuthenticationPrincipal UserDetails userDetails) {
+       return roomService.add(room, userDetails.getUsername());
     }
 
 }

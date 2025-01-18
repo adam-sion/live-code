@@ -4,7 +4,7 @@ import { LoginData } from "../types/LoginData";
 import { SignupData } from "../types/SignupData";
 import { toast } from "react-toastify";
 import { useLoading } from "./loadingContext";
-import { User } from "../types/User";
+import { User } from "../types/Code";
 
 interface AuthContextType {
   login: (user: LoginData) => Promise<boolean|undefined>;

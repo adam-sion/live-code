@@ -22,8 +22,8 @@ DROP TABLE IF EXISTS live_code.room_user CASCADE;
 CREATE TABLE live_code.room_user (
     room_id BIGINT NOT NULL REFERENCES live_code.rooms(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL REFERENCES live_code.users(id) ON DELETE CASCADE,
-    role VARCHAR(50) CHECK(role IN ('user', 'admin')) DEFAULT 'user',
-    last_active_at TIMESTAMP,
+    role VARCHAR(50),
+    is_active BOOLEAN,
     PRIMARY KEY (room_id, user_id)
 );
 

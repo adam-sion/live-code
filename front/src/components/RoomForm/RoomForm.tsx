@@ -1,9 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { FC } from "react";
-import { useForm, UseFormHandleSubmit } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormHandleSubmit } from "react-hook-form";
 import * as Yup from "yup";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { Room } from "../../types/Code";
 
 const RoomSchema = Yup.object().shape({
     roomName: Yup.string()
@@ -11,26 +12,31 @@ const RoomSchema = Yup.object().shape({
       .max(100, "reached chars limit")
   });
 
-  type props = {
-    method:string,
+ export type FormData = {
+    roomName:string
   }
 
-export const RoomForm:FC<props> = ({method})=> {
+  type props = {
+    method:string,
+    onSubmit:(data:FormData)=> void
+  }
+
+export const RoomForm:FC<props> = ({method, onSubmit})=> {
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
-      } = useForm({
+      } = useForm<FormData>({
         resolver: yupResolver(RoomSchema),
       });
      
-      const onSubmit = async (data:any) => {
-        reset(); 
-    } 
    return ( <Box
     component={"form"}
-    onSubmit={handleSubmit(onSubmit)}
+    onSubmit={handleSubmit((data) => {
+      onSubmit(data); 
+      reset();       
+    })}
     sx={{
       display: "flex",
       justifyContent: "center",

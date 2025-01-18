@@ -1,5 +1,8 @@
 package adam.dev.liveCode.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +30,8 @@ public class RoomUser {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "last_active_at")
-    private LocalDateTime lastActiveAt;
+    @Column(name = "is_active")
+    private boolean isActive;
 
     public User getUser() {
      return user;
@@ -44,6 +47,30 @@ public class RoomUser {
 
  public void setRole(Role role) {
   this.role = role;
+ }
+
+ public RoomUserId getId() {
+  return id;
+ }
+
+ public void setId(RoomUserId id) {
+  this.id = id;
+ }
+
+ public Room getRoom() {
+  return room;
+ }
+
+ public Role getRole() {
+  return role;
+ }
+
+ public boolean isActive() {
+  return isActive;
+ }
+
+ public void setActive(boolean active) {
+  isActive = active;
  }
 }
 

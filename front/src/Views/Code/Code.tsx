@@ -8,11 +8,12 @@ import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CloseIcon from '@mui/icons-material/Close';
-import { RoomForm } from "../../components/RoomForm/RoomForm";
+import { FormData, RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
-import { User } from "../../types/User";
+import { Room, RoomUser, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
+import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -141,6 +142,22 @@ export const Code: FC = () => {
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
 const [count, setCount] = useState(6);
 const {user} = useAuth();
+const {addRoom} = useCreateRoom();
+const [rooms, setRooms] = useState<RoomUser[]|undefined>([]);
+
+const handleJoinRoom = async (room:FormData)=> {
+  
+}
+
+const handleCreateRoom = async (room:FormData)=> {
+  const newRoom = await addRoom(room.roomName);
+  console.log(newRoom);
+}
+
+useEffect(()=> {
+setRooms(user?.roomUsers);
+console.log(rooms);
+},[])
 
 
 
@@ -196,7 +213,7 @@ const {user} = useAuth();
   return (
     <Box
       sx={{
-     
+     minHeight:'100vh',
         display: "flex",
         flexDirection: "column",
         backgroundColor:"rgba(0,0,0,0.1)",
@@ -283,14 +300,15 @@ const {user} = useAuth();
 >
   <Box
     sx={{
-      flex: 1 // Take equal width
+      flex: 1, // Take equal width
+
     }}
   >
     <Editor
       
-      height="99%"
+      height="100%"
        // Fill parent container height
-      width="100%" // Fill parent container width
+      width="50vw" // Fill parent container width
       language={progLang?.name}
       defaultValue="// Write your code here..."
       value={code}
@@ -427,7 +445,7 @@ const {user} = useAuth();
         </AccordionSummary>
         <AccordionDetails>
         
-<RoomForm method="Join"/>
+<RoomForm method="Join" onSubmit={handleJoinRoom}/>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -439,7 +457,7 @@ const {user} = useAuth();
           <Typography component="span">Create room</Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <RoomForm method="Create"/>
+        <RoomForm method="Create" onSubmit={handleCreateRoom}/>
         </AccordionDetails>
       </Accordion>
       </Box>
@@ -514,7 +532,6 @@ const {user} = useAuth();
           value={output}
           style={{
             
-            width: "100%",
             height: "calc(100% - 50px)",
             background: "rgba(58, 47, 143, 0.8)",
             color: "#fff",

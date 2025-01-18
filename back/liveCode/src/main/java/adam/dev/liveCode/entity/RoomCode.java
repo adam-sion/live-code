@@ -16,7 +16,7 @@ public class RoomCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private Room originalRoom;
 

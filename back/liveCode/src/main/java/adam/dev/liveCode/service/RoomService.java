@@ -1,10 +1,8 @@
 package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.dao.RoomRepository;
-import adam.dev.liveCode.entity.Role;
-import adam.dev.liveCode.entity.Room;
-import adam.dev.liveCode.entity.RoomUser;
-import adam.dev.liveCode.entity.User;
+import adam.dev.liveCode.dto.CreateRoomDTO;
+import adam.dev.liveCode.entity.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +13,26 @@ public class RoomService {
 
     private UserService userService;
 
-    public RoomService(RoomRepository roomRepository) {
+    public RoomService(RoomRepository roomRepository, UserService userService) {
         this.roomRepository = roomRepository;
+        this.userService = userService;
     }
 
     @Transactional
-    public void add(String roomName, String userName) {
+    public Room add(CreateRoomDTO roomDTO, String userName) {
         Room room = new Room();
+        room.setName(roomDTO.getRoomName());
+        Room savedRoom = roomRepository.save(room);
         User admin = userService.findByUsername(userName);
         RoomUser adminRoomUser = new RoomUser();
-        adminRoomUser.setRoom(room);
+        RoomUserId roomUserId = new RoomUserId(savedRoom.getId(), admin.getId());
+        adminRoomUser.setId(roomUserId);
+        adminRoomUser.setRoom(savedRoom);
         adminRoomUser.setUser(admin);
         adminRoomUser.setRole(Role.ADMIN);
-        room.getRoomUsers().add(adminRoomUser);
-        room.setName(roomName);
-        roomRepository.save(room);
+        savedRoom.getRoomUsers().add(adminRoomUser);
+        return savedRoom;
     }
+
 
 }

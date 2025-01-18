@@ -1,5 +1,9 @@
 package adam.dev.liveCode.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +30,12 @@ public class Room {
     @OneToMany(mappedBy = "requestedRoom")
     private List<RoomUserRequest> roomUserRequests = new ArrayList<>();
 
-    @OneToOne(mappedBy = "originalRoom")
-    private RoomCode roomCode;
+    @OneToMany(mappedBy = "originalRoom")
+    private List<RoomCode> roomCodes = new ArrayList<>();
+
+    public String getName() {
+        return name;
+    }
 
     public List<RoomUser> getRoomUsers() {
         return roomUsers;
@@ -35,5 +43,9 @@ public class Room {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
