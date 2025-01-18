@@ -2,9 +2,13 @@ package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.dao.RoomRepository;
 import adam.dev.liveCode.dto.CreateRoomDTO;
+import adam.dev.liveCode.dto.RoomDTO;
+import adam.dev.liveCode.dto.RoomUserDTO;
 import adam.dev.liveCode.entity.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
@@ -19,7 +23,7 @@ public class RoomService {
     }
 
     @Transactional
-    public Room add(CreateRoomDTO roomDTO, String userName) {
+    public RoomDTO add(CreateRoomDTO roomDTO, String userName) {
         Room room = new Room();
         room.setName(roomDTO.getRoomName());
         Room savedRoom = roomRepository.save(room);
@@ -27,11 +31,18 @@ public class RoomService {
         RoomUser adminRoomUser = new RoomUser();
         RoomUserId roomUserId = new RoomUserId(savedRoom.getId(), admin.getId());
         adminRoomUser.setId(roomUserId);
+        adminRoomUser.setActive(true);
         adminRoomUser.setRoom(savedRoom);
         adminRoomUser.setUser(admin);
         adminRoomUser.setRole(Role.ADMIN);
         savedRoom.getRoomUsers().add(adminRoomUser);
-        return savedRoom;
+        RoomDTO toReturn = new RoomDTO();
+        toReturn.setRoomName(savedRoom.getName());
+        toReturn.setRooms(savedRoom.getRoomUsers().stream()
+                .map((roomUser -> new RoomUserDTO(roomUser.getRole(), roomUser.isActive(), roomUser.getUser().getUsername())))
+        .collect(Collectors.toList()));
+
+        return toReturn;
     }
 
 

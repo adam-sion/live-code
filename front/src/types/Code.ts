@@ -10,6 +10,13 @@ export type RoomUser = {
     room:Room
 }
 
-export type Room =  {
+export type RoomUserDTO = {
+    role:string,
+    isActive:boolean,
+    username:string
+}
+
+type Room =  {
     name:string,
+    roomUsers:RoomUserDTO[]
 }
