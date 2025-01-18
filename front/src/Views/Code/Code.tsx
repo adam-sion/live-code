@@ -1,9 +1,9 @@
 import { Editor } from "@monaco-editor/react";
 import { FC, useEffect, useState } from "react";
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Toolbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, TextareaAutosize, Toolbar, Typography } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Bolt, Home, Login } from "@mui/icons-material";
+import { Bolt, Close, Home, Login } from "@mui/icons-material";
 import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -153,6 +153,21 @@ const {user} = useAuth();
     setProgLang(progLangs.find((currProgLang) => currProgLang.name === event.target.value as string));
   };
 
+  const [isConsoleOpen, setConsoleOpen] = useState(false);
+  const [output, setOutput] = useState("");
+
+  const handleRunClick = () => {
+    setConsoleOpen(true);
+
+    
+    setTimeout(() => {
+      setOutput("Compilation successful! Output:\nHello, World!");
+    }, 1000); 
+  };
+
+  const handleCloseConsole = () => {
+    setConsoleOpen(false);
+  };
   const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
@@ -181,7 +196,7 @@ const {user} = useAuth();
   return (
     <Box
       sx={{
-       height:'100%',
+     
         display: "flex",
         flexDirection: "column",
         backgroundColor:"rgba(0,0,0,0.1)",
@@ -220,7 +235,7 @@ const {user} = useAuth();
               ))}
             </Select>
           </Box>
-          <Button sx={{ padding: "2" }} color="success" variant="contained" endIcon={<Bolt />}>
+          <Button onClick={handleRunClick} sx={{ padding: "2" }} color="success" variant="contained" endIcon={<Bolt />}>
             Run
           </Button>
           <img src={darklogo} alt="" />
@@ -228,6 +243,7 @@ const {user} = useAuth();
         <Toolbar sx={{ justifyContent:'center', gap: {md:10, sm:5, xs:3},width: '80%' }}>
         <Box
             sx={{   
+              height:'100%',
               textAlign:'center',
                 fontSize: '20px',
                 m: 1,
@@ -271,7 +287,9 @@ const {user} = useAuth();
     }}
   >
     <Editor
-      height="100%" // Fill parent container height
+      
+      height="99%"
+       // Fill parent container height
       width="100%" // Fill parent container width
       language={progLang?.name}
       defaultValue="// Write your code here..."
@@ -284,10 +302,11 @@ const {user} = useAuth();
         minimap: { enabled: false },
       }}
     />
+   
   </Box>
   <Box
     sx={{
-      
+
       flex: 1, // Take equal width
       display: "flex", // Optional: for content alignment inside this box
       flexDirection:"column",
@@ -462,21 +481,51 @@ const {user} = useAuth();
 
    </Box>
    
-   <Box sx = {{height:"50%",  boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
-              borderRadius:'12px',}}>
-   <Divider
-  sx={{
-    borderBottomWidth: '10px',  
-    borderColor: 'black', 
-    fontWeight: 'fontWeightMedium',
-    mb: 4,
-  }}
->
-  <Typography sx={{fontSize:'40px',fontFamily: '"Comic Sans MS", "Comic Sans", cursive'}}>Compiler Result</Typography>
-</Divider>
+
 </Box>
 </Box>
-</Box>
+<Drawer
+     ModalProps={{
+      hideBackdrop: true, // Disable the backdrop
+    }}
+        anchor="bottom"
+        open={isConsoleOpen}
+        onClose={handleCloseConsole}
+        sx={{
+
+          "& .MuiDrawer-paper": {
+            overflowX:'hidden',
+            height: "30vh",
+            background: "rgba(58, 47, 143, 0.8)",
+            color: "#fff",
+            padding: 2,
+          },
+        }}
+      >
+        <Box sx={{padding:"10px",  background: "rgba(58, 47, 143, 0.8)",display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6">Compilation Console</Typography>
+          <IconButton onClick={handleCloseConsole} sx={{ color: "#fff" }}>
+            <Close />
+          </IconButton>
+        </Box>
+        <TextareaAutosize
+          minRows={10}
+          readOnly
+          value={output}
+          style={{
+            
+            width: "100%",
+            height: "calc(100% - 50px)",
+            background: "rgba(58, 47, 143, 0.8)",
+            color: "#fff",
+            border: "none",
+            padding: "10px",
+            fontSize: "16px",
+            fontFamily: "monospace",
+            resize: "none",
+          }}
+        />
+      </Drawer>
     </Box>
   );
 };
