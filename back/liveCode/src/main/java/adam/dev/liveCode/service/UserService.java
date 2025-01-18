@@ -63,6 +63,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", id)));
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

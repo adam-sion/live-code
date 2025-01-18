@@ -34,5 +34,16 @@ public class RoomUser {
      return user;
     }
 
+    public void setUser(User user) {
+     this.user = user;
+    }
+
+ public void setRoom(Room room) {
+  this.room = room;
+ }
+
+ public void setRole(Role role) {
+  this.role = role;
+ }
 }
 

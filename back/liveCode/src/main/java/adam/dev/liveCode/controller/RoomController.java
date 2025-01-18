@@ -1,7 +1,8 @@
 package adam.dev.liveCode.controller;
 
-import adam.dev.liveCode.entity.Room;
 import adam.dev.liveCode.service.RoomService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,8 @@ public class RoomController {
     }
 
     @PostMapping
-    public String addRoom(@RequestBody Room room) {
-        roomService.add(room);
+    public String addRoom(@RequestBody String roomName, @AuthenticationPrincipal UserDetails userDetails) {
+        roomService.add(roomName, userDetails.getUsername());
 
         return "room added successfully";
     }
