@@ -141,7 +141,7 @@ export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
 const [count, setCount] = useState(6);
-const {user} = useAuth();
+// const {user} = useAuth();
 const {addRoom} = useCreateRoom();
 const [rooms, setRooms] = useState<RoomUser[]|undefined>([]);
 
@@ -155,7 +155,7 @@ const handleCreateRoom = async (room:FormData)=> {
 }
 
 useEffect(()=> {
-setRooms(user?.roomUsers);
+setRooms([]);
 console.log(rooms);
 },[])
 
@@ -213,6 +213,7 @@ console.log(rooms);
   return (
     <Box
       sx={{
+        
      minHeight:'100vh',
         display: "flex",
         flexDirection: "column",
@@ -273,7 +274,7 @@ console.log(rooms);
                
             }}
         >
-           Welcome back, {user?.username}
+           Welcome back, bro
           
         </Box>
         <Link to={"/"}>
@@ -308,7 +309,7 @@ console.log(rooms);
       
       height="100%"
        // Fill parent container height
-      width="50vw" // Fill parent container width
+       // Fill parent container width
       language={progLang?.name}
       defaultValue="// Write your code here..."
       value={code}

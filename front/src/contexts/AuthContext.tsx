@@ -42,6 +42,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     try {
      
       const {data,status} = await userApi.get('/me', { withCredentials: true });
+      console.log(data)
       if (status === 200) {
         setUser(data);
        return true;
@@ -56,7 +57,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
    useEffect( () => {
    checkAuth();
-   getUser();
+
     const responseInterceptor = authApi.interceptors.response.use(
       (response) => response,
       async (error) => {
