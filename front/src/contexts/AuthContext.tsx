@@ -57,7 +57,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
    useEffect( () => {
    checkAuth();
-
+  getUser();
     const responseInterceptor = authApi.interceptors.response.use(
       (response) => response,
       async (error) => {

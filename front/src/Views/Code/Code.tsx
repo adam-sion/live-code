@@ -141,7 +141,7 @@ export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
 const [count, setCount] = useState(6);
-// const {user} = useAuth();
+ const {user} = useAuth();
 const {addRoom} = useCreateRoom();
 const [rooms, setRooms] = useState<RoomUser[]|undefined>([]);
 
@@ -274,7 +274,7 @@ console.log(rooms);
                
             }}
         >
-           Welcome back, bro
+           Welcome back, {user?.username}
           
         </Box>
         <Link to={"/"}>
