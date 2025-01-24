@@ -64,7 +64,7 @@ public class UserController {
 
     @RequestMapping("/**")
     public ResponseEntity<ErrorResponse> handleInvalidEndpoint() {
-        return new ResponseEntity<>(new ErrorResponse("Not found", "endpoint not found"), HttpStatus.NOT_FOUND);  // Correct order
+        return new ResponseEntity<>(new ErrorResponse("Not found", "endpoint not found"), HttpStatus.NOT_FOUND);
     }
 
 }

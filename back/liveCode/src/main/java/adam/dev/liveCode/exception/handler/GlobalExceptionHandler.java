@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        ErrorResponse error = new ErrorResponse("Bad Request", "Request body is missing or malformed");
+        ErrorResponse error = new ErrorResponse("Bad Request", ex.getMessage().split(":")[0]);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
