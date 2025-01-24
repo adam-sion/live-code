@@ -1,5 +1,12 @@
 package adam.dev.liveCode.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+@AllArgsConstructor
+@Getter
+@ToString
 public enum Role {
 
     USER("user"),
@@ -7,18 +14,5 @@ public enum Role {
      ADMIN("admin");
 
     private final String name;
-
-     Role(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
 
 }

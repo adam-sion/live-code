@@ -5,6 +5,7 @@ import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.security.jwt.JwtUtil;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,21 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
-    private UserService userService;
+    private final UserService userService;
 
-    private JwtUtil jwtUtil;
-
-    public UserController(UserService userService, JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-    }
+    private final JwtUtil jwtUtil;
 
     @GetMapping
     public List<User> getAllUsers() {

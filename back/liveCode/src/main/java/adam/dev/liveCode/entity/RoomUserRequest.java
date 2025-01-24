@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name="room_user_requests")
 public class RoomUserRequest {
-
-    public RoomUserRequest() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
