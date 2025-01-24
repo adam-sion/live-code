@@ -74,31 +74,6 @@ const IOSSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-const renderRow = (props: ListChildComponentProps)=> {
-  const { index, style } = props;
-  return (
-    <ListItem
-   style={{
-     ...style,
-     padding: 0, // Remove additional padding
-     margin: 0, // Remove extra margin
-   }}
-   key={index}
-   component="div"
-   disablePadding
- >
-   <ListItemButton
-     style={{
-       backgroundColor: "rgba(131, 114, 114, 0.1)",
-       padding: "0 8px", // Adjust as needed for consistency
-     }}
-   >
-    <ListItemText primary={`Item ${index + 1}`}/>
-    <IOSSwitch></IOSSwitch>
-    </ListItemButton>
- </ListItem>
-  )
-}
 
 const requestRow = (props: ListChildComponentProps)=> {
   const { index, style } = props;
@@ -143,22 +118,40 @@ export const Code: FC = () => {
 const [count, setCount] = useState(6);
  const {user} = useAuth();
 const {addRoom} = useCreateRoom();
-const [rooms, setRooms] = useState<RoomUser[]|undefined>([]);
-
 const handleJoinRoom = async (room:FormData)=> {
   
+}
+
+const renderRow = (props: ListChildComponentProps)=> {
+  const { index, style } = props;
+  return (
+    <ListItem
+   style={{
+     ...style,
+     padding: 0, // Remove additional padding
+     margin: 0, // Remove extra margin
+   }}
+   key={index}
+   component="div"
+   disablePadding
+ >
+   <ListItemButton
+     style={{
+       backgroundColor: "rgba(131, 114, 114, 0.1)",
+       padding: "0 8px", // Adjust as needed for consistency
+     }}
+   >
+    <ListItemText primary={user?.roomUsers[index].room.name}/>
+    <IOSSwitch></IOSSwitch>
+    </ListItemButton>
+ </ListItem>
+  )
 }
 
 const handleCreateRoom = async (room:FormData)=> {
   const newRoom = await addRoom(room.roomName);
   console.log(newRoom);
 }
-
-useEffect(()=> {
-setRooms([]);
-console.log(rooms);
-},[])
-
 
 
   const handleEditorChange = (value: string | undefined) => {
@@ -355,11 +348,11 @@ console.log(rooms);
         </Box>
 
  <FixedSizeList
- style={{  overflowY: count * 46 > 300 ? "auto" : "hidden"}}
+ style={{  overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 300 ? "auto" : "hidden"}}
         height={Math.min(300,count*46)}
         width={360}
-        itemSize={46}
-        itemCount={count}
+        itemSize={(46)}
+        itemCount={(user?.roomUsers.length ? user.roomUsers.length :46)}
         overscanCount={5}
       >
         {renderRow}

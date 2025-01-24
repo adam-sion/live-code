@@ -1,6 +1,6 @@
 package adam.dev.liveCode.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,7 +18,7 @@ public class Room {
     @Column
     private String name;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomUser> roomUsers;
 

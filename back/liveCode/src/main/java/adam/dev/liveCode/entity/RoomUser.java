@@ -1,6 +1,7 @@
 package adam.dev.liveCode.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class RoomUser {
    @EmbeddedId
    private RoomUserId id;
 
- @JsonBackReference
+   @JsonManagedReference
     @ManyToOne
     @MapsId("roomId")
     @JoinColumn(name = "room_id", insertable = false, updatable = false)
