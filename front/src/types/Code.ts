@@ -7,16 +7,12 @@ export type User = {
 
 export type RoomUser = {
     role:string,
-    room:Room
+    room:Room,
+    active:boolean
 }
 
-export type RoomUserDTO = {
-    role:string,
-    isActive:boolean,
-    username:string
-}
 
 type Room =  {
     name:string,
-    roomUsers:RoomUserDTO[]
+    roomUsers:RoomUser[]
 }

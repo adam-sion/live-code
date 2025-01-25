@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { Room, RoomUser, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
+
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
@@ -74,7 +75,6 @@ const IOSSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-
 const requestRow = (props: ListChildComponentProps)=> {
   const { index, style } = props;
 
@@ -115,7 +115,6 @@ const requestRow = (props: ListChildComponentProps)=> {
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
-const [count, setCount] = useState(6);
  const {user} = useAuth();
 const {addRoom} = useCreateRoom();
 const handleJoinRoom = async (room:FormData)=> {
@@ -142,7 +141,7 @@ const renderRow = (props: ListChildComponentProps)=> {
      }}
    >
     <ListItemText primary={user?.roomUsers[index].room.name}/>
-    <IOSSwitch></IOSSwitch>
+    <IOSSwitch checked={user?.roomUsers[index].active}></IOSSwitch>
     </ListItemButton>
  </ListItem>
   )
@@ -349,7 +348,7 @@ const handleCreateRoom = async (room:FormData)=> {
 
  <FixedSizeList
  style={{  overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 300 ? "auto" : "hidden"}}
-        height={Math.min(300,count*46)}
+        height={6*46}
         width={360}
         itemSize={(46)}
         itemCount={(user?.roomUsers.length ? user.roomUsers.length :46)}
@@ -478,11 +477,11 @@ const handleCreateRoom = async (room:FormData)=> {
         </Box>
 
  <FixedSizeList
- style={{  overflowY: count * 46 > 300 ? "auto" : "hidden"}}
-        height={Math.min(300,count*46)}
+ style={{  overflowY: 6 * 46 > 300 ? "auto" : "hidden"}}
+        height={6*46}
         width={360}
         itemSize={46}
-        itemCount={count}
+        itemCount={6}
         overscanCount={5}
       >
         {requestRow}
