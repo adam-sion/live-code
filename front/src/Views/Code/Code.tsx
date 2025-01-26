@@ -205,8 +205,8 @@ const handleCreateRoom = async (room:FormData)=> {
   return (
     <Box
       sx={{
-        
-     minHeight:'100vh',
+        height:'100%',
+     minHeight:'100%',
         display: "flex",
         flexDirection: "column",
         backgroundColor:"rgba(0,0,0,0.1)",
