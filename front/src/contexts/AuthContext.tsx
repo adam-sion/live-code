@@ -38,6 +38,10 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const refreshToken = async ()=> {
+    await authApi.post("/refresh-token");
+  }
+
   const getUser = async () => {
     try {
      
@@ -58,38 +62,12 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
    useEffect( () => {
    checkAuth();
   getUser();
-    const responseInterceptor = authApi.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
+refreshToken();
 
-        if (
-          error.response?.status === 401 &&
-          !originalRequest._retry &&
-          error.response?.data?.message === "Token expired"
-        ) {
-          originalRequest._retry = true;
+const interval = setInterval(refreshToken, 1000 * 60 * 10);
 
-          try {
-          
-            const {data} = await authApi.post("/refresh-token");
-            console.log(`refresh token was requesteddddddd, response : =>=>=> ${data}`)
-        
-            return authApi(originalRequest);
-          } catch (refreshError) {
-            toast.error("Session expired. Please log in again.");
-            return Promise.reject(refreshError);
-          }
-        }
+return ()=> clearInterval(interval);
 
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-
-      authApi.interceptors.response.eject(responseInterceptor);
-    };
   }, []);
   
    const login = async (user:LoginData)=> {
