@@ -2,13 +2,15 @@ package adam.dev.liveCode.service;
 
 import adam.dev.liveCode.dao.RoomRepository;
 import adam.dev.liveCode.dao.RoomUserRepository;
+import adam.dev.liveCode.dao.UserRepository;
+import adam.dev.liveCode.dto.UserDTO;
 import adam.dev.liveCode.entity.Room;
 import adam.dev.liveCode.entity.RoomUser;
 import adam.dev.liveCode.entity.User;
-import adam.dev.liveCode.dao.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private UserRepository userRepository;
@@ -28,19 +31,20 @@ public class UserService {
 
     private RoomRepository roomRepository;
 
-    public UserService(RoomRepository roomRepository, UserRepository userRepository, RoomUserRepository roomUserRepository) {
-        this.roomRepository = roomRepository;
-        this.userRepository = userRepository;
-        this.roomUserRepository = roomUserRepository;
-    }
+    private PasswordEncoder passwordEncoder;
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Transactional
-    public void createUser(User user) {
+    public void createUser(UserDTO toRegister) {
         try {
+            User user = new User();
+            user.setUsername(toRegister.getUsername());
+            user.setEmail(toRegister.getEmail());
+            user.setPassword(passwordEncoder.encode(toRegister.getPassword()));
              userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
             throw new EntityExistsException("User already exists");

@@ -1,6 +1,6 @@
 package adam.dev.liveCode.controller;
 
-import adam.dev.liveCode.entity.User;
+import adam.dev.liveCode.dto.UserDTO;
 import adam.dev.liveCode.exception.ErrorResponse;
 import adam.dev.liveCode.security.jwt.JwtUtil;
 import adam.dev.liveCode.security.jwt.model.AuthRequest;
@@ -65,9 +65,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid User userToRegister) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid UserDTO userToRegister) {
 
-        userToRegister.setPassword(passwordEncoder.encode(userToRegister.getPassword()));
         userService.createUser(userToRegister);
 
         return ResponseEntity.ok("User registered successfully!");

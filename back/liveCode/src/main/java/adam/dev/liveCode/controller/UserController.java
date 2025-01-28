@@ -30,11 +30,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping
-    public void createUser(@RequestBody User user) {
-         userService.createUser(user);
-    }
-
     @GetMapping("/checkLoggedIn")
     public ResponseEntity<String> checkLoggedIn(@CookieValue String authToken) {
 
