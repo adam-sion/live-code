@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Bolt, Close, Home, Login } from "@mui/icons-material";
+import { Bolt, Close, ConnectWithoutContact, Home, Login } from "@mui/icons-material";
 import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { Room, RoomUser, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -115,7 +116,7 @@ const requestRow = (props: ListChildComponentProps)=> {
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
- const {user} = useAuth();
+ const {user, setUser} = useAuth();
 const {addRoom} = useCreateRoom();
 const handleJoinRoom = async (room:FormData)=> {
   
@@ -134,19 +135,27 @@ const renderRow = (props: ListChildComponentProps)=> {
    component="div"
    disablePadding
  >
-   <ListItemButton
+   <ListItem
      style={{
        backgroundColor: "rgba(131, 114, 114, 0.1)",
        padding: "0 8px", // Adjust as needed for consistency
      }}
    >
     <ListItemText primary={user?.roomUsers[index].room.name}/>
-    <IOSSwitch checked={user?.roomUsers[index].active}></IOSSwitch>
-    </ListItemButton>
+    <IOSSwitch name={`${index}`} checked={user?.roomUsers[index].active} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
+    </ListItem>
  </ListItem>
   )
 }
+const handleToggleRoomActive = (index: number) => {
+  if (!user) return;
 
+  const updatedUsers = user.roomUsers.map((room, i) => 
+    i === index ? { ...room, active: !room.active } : room
+  );
+
+  setUser({ ...user, roomUsers: updatedUsers });
+};
 const handleCreateRoom = async (room:FormData)=> {
   const newRoom = await addRoom(room.roomName);
   console.log(newRoom);
@@ -181,11 +190,13 @@ const handleCreateRoom = async (room:FormData)=> {
   const [date, setDate] = useState<string>("");
 
 
-  const [value, setValue] = useState(0);
+  const [selectedRoom, setSelectedRoom] = useState<string | false>(false);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setSelectedRoom(newValue);
   };
+  
 
 
   useEffect(() => {
@@ -220,6 +231,7 @@ const handleCreateRoom = async (room:FormData)=> {
         backgroundColor:"rgba(0,0,0,0.1)",
       }}
     >
+  
       <AppBar
         sx={{
           width:"100%",
@@ -300,33 +312,35 @@ const handleCreateRoom = async (room:FormData)=> {
     
   }}
 >
+  <Box sx={{paddingTop:'15px', textAlign:'center'}}>
+  <ConnectWithoutContactIcon sx={{fontSize:'30px'}}/>
+  <Tabs
+  indicatorColor="secondary"
+  textColor="inherit"
+  orientation="vertical"
+  variant="scrollable"
+  value={selectedRoom}
+  onChange={handleChange}
+  aria-label="Vertical tabs example"
+  sx={{ borderRight: 1, borderColor: 'divider', alignItems:'center' }}
+>
+  {user?.roomUsers.map((roomUser: RoomUser) =>
+    roomUser.active ? (
+      <Tab key={roomUser.room.name} value={roomUser.room.name} label={roomUser.room.name} />
+    ) : null
+  )}
+</Tabs>
+
+</Box>
   <Box
     sx={{
+      paddingTop:2,
       flex: 1, // Take equal width
 
     }}
   >
-
-{/* <Box>
-      <Tabs
-        value={1}
-        onChange={handleChange}
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="scrollable auto tabs example"
-      >
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
-        <Tab label="Item Three" />
-        <Tab label="Item Four" />
-        <Tab label="Item Five" />
-        <Tab label="Item Six" />
-        <Tab label="Item Seven" />
-      </Tabs>
-    </Box> */}
     <Editor
-      
-      height="100%"
+    height={'90vh'}
        // Fill parent container height
        // Fill parent container width
       language={progLang?.name}
@@ -335,6 +349,7 @@ const handleCreateRoom = async (room:FormData)=> {
       onChange={handleEditorChange}
       theme="vs-dark"
       options={{
+    
         fontSize: 26,
         lineHeight: 26,
         minimap: { enabled: false },

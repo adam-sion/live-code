@@ -10,6 +10,7 @@ interface AuthContextType {
   login: (user: LoginData) => Promise<boolean|undefined>;
   signup: (user:SignupData)=> Promise<boolean>;
   user: User|undefined;
+  setUser:Dispatch<SetStateAction<User | undefined>>,
   checkAuth: ()=> Promise<boolean|undefined>;
 }
 
@@ -99,7 +100,7 @@ return ()=> clearInterval(interval);
   }
 
   return (
-    <AuthContext.Provider value={{ login, signup, checkAuth, user}}>
+    <AuthContext.Provider value={{ login, signup, checkAuth, user, setUser}}>
       {children}
     </AuthContext.Provider>
   );
