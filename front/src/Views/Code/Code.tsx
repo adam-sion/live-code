@@ -141,7 +141,7 @@ const renderRow = (props: ListChildComponentProps)=> {
      }}
    >
     <ListItemText primary={user?.roomUsers[index].room.name}/>
-    <IOSSwitch checked={user?.roomUsers[index].active}></IOSSwitch>
+    <IOSSwitch name={`${user?.roomUsers[index].room.name}`} checked={user?.roomUsers[index].active}></IOSSwitch>
     </ListItemButton>
  </ListItem>
   )
