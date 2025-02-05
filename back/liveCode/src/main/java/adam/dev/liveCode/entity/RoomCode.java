@@ -7,20 +7,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="room_code")
+@Table(name = "room_code")
 public class RoomCode {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private RoomCodeId id;
 
     @ManyToOne
+    @MapsId("roomId")
     @JoinColumn(name = "room_id")
     private Room originalRoom;
 
-    @Column
+    @Column(name = "language", insertable = false, updatable = false)
     private String language;
 
     @Column(name = "content")
     private String code;
+
+    public RoomCode(Room originalRoom, String language, String code) {
+        this.id = new RoomCodeId(originalRoom.getId(), language);
+        this.originalRoom = originalRoom;
+        this.language = language;
+        this.code = code;
+    }
 }

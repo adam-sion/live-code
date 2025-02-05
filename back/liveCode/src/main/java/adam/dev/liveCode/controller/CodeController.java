@@ -14,9 +14,9 @@ public class CodeController {
     private final RoomCodeService roomCodeService;
 
     @MessageMapping("/sendCodeLineOperation")
-    @SendTo("topic/roomCode/{roomCodeId}")
-    public String sendCodeLineOperation(@DestinationVariable Long roomCodeId, String code) {
-        roomCodeService.updateCode(roomCodeId, code);
+    @SendTo("topic/roomCode/{roomId}/{language}")
+    public String sendCodeLineOperation(@DestinationVariable Long roomId, @DestinationVariable  String language, String code) {
+        roomCodeService.createOrUpdateRoomCode(roomId, language, code);
 
         return code;
     }

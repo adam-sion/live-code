@@ -38,8 +38,8 @@ CREATE TABLE live_code.room_user_requests (
 
 DROP TABLE IF EXISTS live_code.room_code CASCADE;
 CREATE TABLE live_code.room_code (
-    id SERIAL PRIMARY KEY,
     room_id BIGINT NOT NULL REFERENCES live_code.rooms(id) ON DELETE CASCADE,
     language VARCHAR(50) NOT NULL,
-    content TEXT NOT NULL
+    content TEXT NOT NULL,
+    PRIMARY KEY(room_id, language)
 );

@@ -5,6 +5,7 @@ import adam.dev.liveCode.dto.CreateRoomDTO;
 import adam.dev.liveCode.dto.RoomDTO;
 import adam.dev.liveCode.dto.RoomUserDTO;
 import adam.dev.liveCode.entity.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,9 @@ public class RoomService {
         return toReturn;
     }
 
+    public Room findById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(()->  new EntityNotFoundException("Room not found"));
+    }
 
 }

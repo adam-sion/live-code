@@ -25,7 +25,7 @@ public class Room {
     @OneToMany(mappedBy = "requestedRoom")
     private List<RoomUserRequest> roomUserRequests;
 
-    @OneToMany(mappedBy = "originalRoom")
-    private List<RoomCode> roomCodes;
+//    @OneToMany(mappedBy = "originalRoom")
+//    private List<RoomCode> roomCodes;
 
 }
