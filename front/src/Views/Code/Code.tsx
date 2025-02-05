@@ -340,7 +340,7 @@ const handleCreateRoom = async (room:FormData)=> {
     }}
   >
     <Editor
-    height={'90vh'}
+    height={'91vh'}
        // Fill parent container height
        // Fill parent container width
       language={progLang?.name}
@@ -390,7 +390,7 @@ const handleCreateRoom = async (room:FormData)=> {
 
  <FixedSizeList
  style={{  overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 300 ? "auto" : "hidden"}}
-        height={6*46}
+        height={user? user.roomUsers.length*46: 0}
         width={360}
         itemSize={(46)}
         itemCount={(user?.roomUsers.length ? user.roomUsers.length :0)}
