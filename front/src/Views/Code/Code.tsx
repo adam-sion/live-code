@@ -141,8 +141,8 @@ const renderRow = (props: ListChildComponentProps)=> {
        padding: "0 8px", // Adjust as needed for consistency
      }}
    >
-    <ListItemText primary={user?.roomUsers[index].room.name}/>
-    <IOSSwitch name={`${index}`} checked={user?.roomUsers[index].active} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
+    <ListItemText primary={user?.roomUsers[index]?.room?.name}/>
+    <IOSSwitch name={`${index}`} checked={user?.roomUsers[index]?.active} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
     </ListItem>
  </ListItem>
   )
@@ -393,7 +393,7 @@ const handleCreateRoom = async (room:FormData)=> {
         height={6*46}
         width={360}
         itemSize={(46)}
-        itemCount={(user?.roomUsers.length ? user.roomUsers.length :46)}
+        itemCount={(user?.roomUsers.length ? user.roomUsers.length :0)}
         overscanCount={5}
       >
         {renderRow}
