@@ -39,7 +39,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   const refreshToken = async ()=> {
-    await authApi.post("/refresh-token");
+    await authApi.post("/refresh-token", {}, {withCredentials:true});
   }
 
   const getUser = async () => {

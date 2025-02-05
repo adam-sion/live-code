@@ -1,6 +1,6 @@
 import { Editor } from "@monaco-editor/react";
 import { FC, useEffect, useState } from "react";
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, TextareaAutosize, Toolbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Bolt, Close, Home, Login } from "@mui/icons-material";
@@ -181,6 +181,13 @@ const handleCreateRoom = async (room:FormData)=> {
   const [date, setDate] = useState<string>("");
 
 
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -206,6 +213,7 @@ const handleCreateRoom = async (room:FormData)=> {
     <Box
       sx={{
         height:'100%',
+      
      minHeight:'100%',
         display: "flex",
         flexDirection: "column",
@@ -214,6 +222,7 @@ const handleCreateRoom = async (room:FormData)=> {
     >
       <AppBar
         sx={{
+          width:"100%",
           backgroundColor: "transparent",
           boxShadow: "none",
           position: "static",
@@ -297,6 +306,24 @@ const handleCreateRoom = async (room:FormData)=> {
 
     }}
   >
+
+{/* <Box>
+      <Tabs
+        value={1}
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs example"
+      >
+        <Tab label="Item One" />
+        <Tab label="Item Two" />
+        <Tab label="Item Three" />
+        <Tab label="Item Four" />
+        <Tab label="Item Five" />
+        <Tab label="Item Six" />
+        <Tab label="Item Seven" />
+      </Tabs>
+    </Box> */}
     <Editor
       
       height="100%"
