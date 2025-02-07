@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class Room {
 
     @JsonBackReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<RoomUser> roomUsers;
+    private List<RoomUser> roomUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "requestedRoom")
     private List<RoomUserRequest> roomUserRequests;

@@ -1,23 +1,19 @@
 package adam.dev.liveCode.service;
 
+import adam.dev.liveCode.dao.RoomCodeRepository;
 import adam.dev.liveCode.entity.Room;
 import adam.dev.liveCode.entity.RoomCode;
-import adam.dev.liveCode.dao.RoomCodeRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+@AllArgsConstructor
 @Service
 public class RoomCodeService {
 
-    private RoomCodeRepository roomCodeRepository;
+    private final RoomCodeRepository roomCodeRepository;
 
-    private RoomService roomService;
-
-    public RoomCodeService(RoomCodeRepository roomCodeRepository) {
-        this.roomCodeRepository = roomCodeRepository;
-    }
+    private final RoomService roomService;
 
 
     public void createOrUpdateRoomCode(Long roomId, String language, String code) {

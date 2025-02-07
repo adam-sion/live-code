@@ -15,6 +15,7 @@ import { Room, RoomUser, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import WebSocketService from "../../webscoket/WebSocketService";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -163,8 +164,8 @@ const handleCreateRoom = async (room:FormData)=> {
 
 
   const handleEditorChange = (value: string | undefined) => {
-
     setCode(value || "");
+    WebSocketService.sendMessage({roomId: 3, language: 'python', code:value || ""});
   };
 
   const handleLangChange = (event: SelectChangeEvent) => {
@@ -213,11 +214,25 @@ const handleCreateRoom = async (room:FormData)=> {
       setDate(currentDate);
     };
 
+    WebSocketService.connect(() => {
+      console.log('Connected to WebSocket!');
+      
+  
+      WebSocketService.subscribeToTopic(3, 'python', (message) => {
+        console.log('Received message:', message);
+        setCode(message.code);
+      });
+    });
+
+
     // Update time and date every second
     const interval = setInterval(updateDateTime, 1000);
 
     // Cleanup interval on component unmount
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      WebSocketService.disconnect();
+    }
   }, []);
 
   return (
