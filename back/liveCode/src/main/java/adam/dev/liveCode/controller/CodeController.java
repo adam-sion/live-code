@@ -1,24 +1,29 @@
 package adam.dev.liveCode.controller;
 
+import adam.dev.liveCode.dto.RoomCodeDTO;
 import adam.dev.liveCode.service.RoomCodeService;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-@AllArgsConstructor
 @Controller
+@AllArgsConstructor
 public class CodeController {
 
     private final RoomCodeService roomCodeService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/sendCodeLineOperation")
-    @SendTo("topic/roomCode/{roomId}/{language}")
-    public String sendCodeLineOperation(@DestinationVariable Long roomId, @DestinationVariable  String language, String code) {
-        roomCodeService.createOrUpdateRoomCode(roomId, language, code);
+    public void sendCodeLineOperation(RoomCodeDTO message) {
+        roomCodeService.createOrUpdateRoomCode(
+                message.getRoomId(),
+                message.getLanguage(),
+                message.getCode()
+        );
 
-        return code;
+        String destination = String.format("/topic/roomCode/%d/%s", message.getRoomId(), message.getLanguage());
+        messagingTemplate.convertAndSend(destination, message);
     }
-
 }
+
