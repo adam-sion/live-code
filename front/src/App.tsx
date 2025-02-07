@@ -8,8 +8,8 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoadingProvider } from './contexts/loadingContext.tsx'
 
-
 const App:FC = ()=> {
+
   return (
     <LoadingProvider>
     <AuthProvider>

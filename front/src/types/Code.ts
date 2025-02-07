@@ -12,7 +12,13 @@ export type RoomUser = {
 }
 
 
-type Room =  {
+export type Room =  {
     name:string,
     roomUsers:RoomUser[]
+}
+
+export type CodeMessage  = {
+    roomId: number, 
+    language: string, 
+    code: string;
 }
