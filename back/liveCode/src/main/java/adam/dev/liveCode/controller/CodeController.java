@@ -18,12 +18,12 @@ public class CodeController {
     public void sendCodeLineOperation(RoomCodeDTO message) {
         System.out.println(message);
         roomCodeService.createOrUpdateRoomCode(
-                message.getRoomId(),
+                message.getRoomName(),
                 message.getLanguage(),
                 message.getCode()
         );
 
-        String destination = String.format("/topic/roomCode/%d/%s", message.getRoomId(), message.getLanguage());
+        String destination = String.format("/topic/roomCode/%s/%s", message.getRoomName(), message.getLanguage());
         messagingTemplate.convertAndSend(destination, message);
     }
 }

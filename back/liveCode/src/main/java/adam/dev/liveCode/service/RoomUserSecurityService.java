@@ -24,7 +24,7 @@ public class RoomUserSecurityService {
         RoomUser roomUser = roomUserRepository.findById((new RoomUserId(roomId, user.getId())))
                 .orElseThrow(() -> new EntityNotFoundException("Room not found"));
 
-        return true;
+        return roomUser.getRole().equals(role);
     }
 
 }

@@ -1,5 +1,6 @@
 import { Editor } from "@monaco-editor/react";
-import { FC, useEffect, useState } from "react";
+import debounce from "lodash-es/debounce";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -162,12 +163,16 @@ const handleCreateRoom = async (room:FormData)=> {
   console.log(newRoom);
 }
 
+const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
 
-  const handleEditorChange = (value: string | undefined) => {
-    setCode(value || "");
-    WebSocketService.sendMessage({roomId: 3, language: 'python', code:value || ""});
-  };
+  const handleEditorChange = useCallback(
+    debounce((value: string | undefined) => {
+      setCode(value || "");
 
+      WebSocketService.sendMessage({ roomName: selectedRoom!! , language: progLang?.name!!, code: value || "" });
+    }, 400),
+    [selectedRoom, progLang]
+  );
   const handleLangChange = (event: SelectChangeEvent) => {
     setProgLang(progLangs.find((currProgLang) => currProgLang.name === event.target.value as string));
   };
@@ -191,7 +196,7 @@ const handleCreateRoom = async (room:FormData)=> {
   const [date, setDate] = useState<string>("");
 
 
-  const [selectedRoom, setSelectedRoom] = useState<string | false>(false);
+
 
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -218,7 +223,7 @@ const handleCreateRoom = async (room:FormData)=> {
       console.log('Connected to WebSocket!');
       
   
-      WebSocketService.subscribeToTopic(3, 'python', (message) => {
+      WebSocketService.subscribeToTopic("testroom1", 'python', (message) => {
         console.log('Received message:', message);
         setCode(message.code);
       });
@@ -334,7 +339,7 @@ const handleCreateRoom = async (room:FormData)=> {
   textColor="inherit"
   orientation="vertical"
   variant="scrollable"
-  value={selectedRoom}
+  value={selectedRoom || false}
   onChange={handleChange}
   aria-label="Vertical tabs example"
   sx={{ borderRight: 1, borderColor: 'divider', alignItems:'center' }}

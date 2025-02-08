@@ -9,6 +9,6 @@ public class RoomCodeDTO {
 
     private String code;
 
-    private Long roomId;
+    private String roomName;
 
 }

@@ -46,8 +46,8 @@ public class RoomService {
         return toReturn;
     }
 
-    public Room findById(Long id) {
-        return roomRepository.findById(id)
+    public Room findByName(String name) {
+        return roomRepository.findByName(name)
                 .orElseThrow(()->  new EntityNotFoundException("Room not found"));
     }
 

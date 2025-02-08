@@ -30,9 +30,6 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
 
-    private final PasswordEncoder passwordEncoder;
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest) {
 
