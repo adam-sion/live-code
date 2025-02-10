@@ -6,9 +6,15 @@ export type User = {
 }
 
 export type RoomUser = {
+    id:RoomUserId
     role:string,
     room:Room,
     active:boolean
+}
+
+export type RoomUserId = {
+    roomId:number,
+    userId:number
 }
 
 
