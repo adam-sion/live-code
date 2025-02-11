@@ -28,7 +28,7 @@ class WebSocketService {
   };
 
   // Subscribe to a specific topic
-  subscribeToTopic = (roomId: number, language: string, callback: (message: any) => void) => {
+  subscribeToTopic = (roomId: string, language: string, callback: (message: any) => void) => {
     const destination = `/topic/roomCode/${roomId}/${language}`;
     this.client.subscribe(destination, (message) => {
       if (message.body) {

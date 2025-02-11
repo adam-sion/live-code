@@ -13,6 +13,7 @@ export const useCreateRoom =  ()=> {
 const addRoom = async (name:string) => {
     try {
     const {data} =  await api.post("",{roomName:name});
+    toast.success("room created successfully!");
     return data;
     } catch(error) {
         console.log(error);

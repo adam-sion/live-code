@@ -35,7 +35,7 @@ public class User {
     @Column
     private String email;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "1")
     @OneToMany(mappedBy = "user")
     private List<RoomUser> roomUsers;
 

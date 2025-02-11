@@ -19,7 +19,7 @@ public class Room {
     @Column
     private String name;
 
-    @JsonBackReference
+    @JsonBackReference(value = "2")
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomUser> roomUsers = new ArrayList<>();
 

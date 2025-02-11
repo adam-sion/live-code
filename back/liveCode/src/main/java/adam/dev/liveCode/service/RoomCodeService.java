@@ -17,17 +17,22 @@ public class RoomCodeService {
 
 
     public void createOrUpdateRoomCode(String roomName, String language, String code) {
-        Room room = roomService.findByName(roomName);
-
         try {
-           RoomCode roomCode = roomCodeRepository.findByOriginalRoomAndLanguage(room, language)
-                   .orElseThrow(() -> new EntityNotFoundException(String.format("Room code: %s not found", roomName)));
+            RoomCode roomCode = getRoomCode(roomName, language);
            roomCode.setCode(code);
            roomCodeRepository.save(roomCode);
        } catch (EntityNotFoundException e) {
+            Room room = roomService.findByName(roomName);
            RoomCode roomCode = new RoomCode(room, language, code);
            roomCodeRepository.save(roomCode);
        }
+    }
+
+    public RoomCode getRoomCode(String roomName, String language) {
+        Room room = roomService.findByName(roomName);
+        return roomCodeRepository.findByOriginalRoomAndLanguage(room, language)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Room code: %s not found", roomName)));
+
     }
 
 }

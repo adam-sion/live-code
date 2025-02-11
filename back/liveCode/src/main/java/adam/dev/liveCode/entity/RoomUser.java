@@ -16,13 +16,13 @@ public class RoomUser {
    @EmbeddedId
    private RoomUserId id;
 
-   @JsonManagedReference
+    @JsonManagedReference(value = "2")
     @ManyToOne
     @MapsId("roomId")
     @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private Room room;
 
- @JsonBackReference
+    @JsonBackReference(value = "1")
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id", insertable = false, updatable = false)

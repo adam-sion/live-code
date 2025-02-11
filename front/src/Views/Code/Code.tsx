@@ -1,7 +1,7 @@
 import { Editor } from "@monaco-editor/react";
 import debounce from "lodash-es/debounce";
 import { FC, useCallback, useEffect, useState } from "react";
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography, useRadioGroup } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Bolt, Close, ConnectWithoutContact, Home, Login } from "@mui/icons-material";
@@ -17,6 +17,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import WebSocketService from "../../webscoket/WebSocketService";
+import { toast } from "react-toastify";
+import { useGetCode } from "../../api/hooks/useGetCode";
+import { useSetRoomUserActive } from "../../api/hooks/useSetRoomUserActive";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -118,8 +121,11 @@ const requestRow = (props: ListChildComponentProps)=> {
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
- const {user, setUser} = useAuth();
+ const {user, setUser, getUser} = useAuth();
 const {addRoom} = useCreateRoom();
+const {setActive} = useSetRoomUserActive();
+const {getCode} = useGetCode();
+
 const handleJoinRoom = async (room:FormData)=> {
   
 }
@@ -149,18 +155,23 @@ const renderRow = (props: ListChildComponentProps)=> {
  </ListItem>
   )
 }
-const handleToggleRoomActive = (index: number) => {
+const handleToggleRoomActive = async (index: number) => {
   if (!user) return;
 
-  const updatedUsers = user.roomUsers.map((room, i) => 
-    i === index ? { ...room, active: !room.active } : room
+  const currRoomUser = user.roomUsers.find((roomUser, i) => 
+    i === index
   );
+  console.log(currRoomUser);
 
-  setUser({ ...user, roomUsers: updatedUsers });
+  await setActive(!currRoomUser?.active, currRoomUser!!)
+ await getUser();
 };
 const handleCreateRoom = async (room:FormData)=> {
   const newRoom = await addRoom(room.roomName);
-  console.log(newRoom);
+  if (newRoom) {
+    await getUser();
+  }
+   
 }
 
 const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
@@ -173,8 +184,10 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
     }, 400),
     [selectedRoom, progLang]
   );
-  const handleLangChange = (event: SelectChangeEvent) => {
-    setProgLang(progLangs.find((currProgLang) => currProgLang.name === event.target.value as string));
+  const handleLangChange = async (event: SelectChangeEvent) => {
+    const prog =progLangs.find((currProgLang) => currProgLang.name === event.target.value as string); 
+    setProgLang(prog);
+    setCode(await getCode(selectedRoom!!, prog?.name!!))
   };
 
   const [isConsoleOpen, setConsoleOpen] = useState(false);
@@ -199,8 +212,9 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
 
 
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = async (event: React.SyntheticEvent, newValue: string) => {
     setSelectedRoom(newValue);
+    setCode(await getCode(newValue, progLang?.name!!))
   };
   
 
@@ -356,10 +370,11 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
     sx={{
       paddingTop:2,
       flex: 1, // Take equal width
-
     }}
   >
-    <Editor
+
+  {
+    selectedRoom ? <Editor
     height={'91vh'}
        // Fill parent container height
        // Fill parent container width
@@ -374,7 +389,27 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
         lineHeight: 26,
         minimap: { enabled: false },
       }}
-    />
+    /> :
+
+    <Box
+    sx={{   
+      textAlign:'center',
+        fontSize: '20px',
+        m: 1,
+        color: 'black',
+        padding:1,
+      boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
+      borderRadius:'12px',
+        fontFamily: 'Gill Sans, Verdana',
+        fontWeight: 'bold',
+       
+    }}
+>
+  No room was chosen yet
+  
+</Box>
+  }
+    
    
   </Box>
   <Box
