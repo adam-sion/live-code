@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Room, RoomUser } from "../../types/Code";
+import { Room, RoomUser, RoomUserId } from "../../types/Code";
 import { toast } from "react-toastify";
 
 
@@ -10,9 +10,9 @@ export const useSetRoomUserActive =  ()=> {
       });
       
 
-const setActive = async (active:boolean, roomUser:RoomUser) => {
+const setActive = async (active:boolean, roomUserId:RoomUserId) => {
     try {
-    await api.patch(`/${active}`, roomUser);
+    await api.patch(`/${active}`, roomUserId);
     } catch(error) {
         console.error(error);
     }

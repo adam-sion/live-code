@@ -32,7 +32,7 @@ public class RoomService {
         RoomUser adminRoomUser = new RoomUser();
         RoomUserId roomUserId = new RoomUserId(savedRoom.getId(), admin.getId());
         adminRoomUser.setId(roomUserId);
-        adminRoomUser.setActive(true);
+        adminRoomUser.setActive(false);
         adminRoomUser.setRoom(savedRoom);
         adminRoomUser.setUser(admin);
         adminRoomUser.setRole(Role.ADMIN);

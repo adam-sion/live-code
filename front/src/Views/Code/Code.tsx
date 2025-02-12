@@ -158,14 +158,26 @@ const renderRow = (props: ListChildComponentProps)=> {
 const handleToggleRoomActive = async (index: number) => {
   if (!user) return;
 
-  const currRoomUser = user.roomUsers.find((roomUser, i) => 
-    i === index
-  );
-  console.log(currRoomUser);
+  const currRoomUser = user.roomUsers.find((_, i) => i === index);
+  if (!currRoomUser) return;
 
-  await setActive(!currRoomUser?.active, currRoomUser!!)
- await getUser();
+  console.log(currRoomUser);
+  console.log("selected room is "+ selectedRoom + " and cuurent " + currRoomUser.room.name);
+  if (currRoomUser.active && selectedRoom === currRoomUser.room.name) {
+    console.log("hot here");
+    setSelectedRoom(undefined);
+  }
+  setUser((prevUser) => ({
+    ...prevUser!!,
+    roomUsers: prevUser!!.roomUsers.map((roomUser, i) =>
+      i === index ? { ...roomUser, active: !roomUser.active } : roomUser
+    ),
+  }));
+  await setActive(!currRoomUser.active, currRoomUser.id);
+
+  
 };
+
 const handleCreateRoom = async (room:FormData)=> {
   const newRoom = await addRoom(room.roomName);
   if (newRoom) {
@@ -374,7 +386,7 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
   >
 
   {
-    selectedRoom ? <Editor
+    selectedRoom !== undefined ? <Editor
     height={'91vh'}
        // Fill parent container height
        // Fill parent container width
