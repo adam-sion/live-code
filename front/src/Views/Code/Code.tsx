@@ -161,10 +161,7 @@ const handleToggleRoomActive = async (index: number) => {
   const currRoomUser = user.roomUsers.find((_, i) => i === index);
   if (!currRoomUser) return;
 
-  console.log(currRoomUser);
-  console.log("selected room is "+ selectedRoom + " and cuurent " + currRoomUser.room.name);
   if (currRoomUser.active && selectedRoom === currRoomUser.room.name) {
-    console.log("hot here");
     setSelectedRoom(undefined);
   }
   setUser((prevUser) => ({
