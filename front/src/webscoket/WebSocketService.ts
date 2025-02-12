@@ -1,7 +1,5 @@
-// src/services/WebSocketService.ts
 import { Client, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { CodeMessage } from '../types/Code';
 
 class WebSocketService {
   private client: Client;
@@ -31,12 +29,10 @@ class WebSocketService {
     }
   };
 
-  // Subscribe to a specific topic
-  subscribeToTopic = (roomId: string, language: string, callback: (message: any) => void) => {
-    const destination = `/topic/roomCode/${roomId}/${language}`;
-
-    // Unsubscribe if already subscribed to avoid duplicate subscriptions
-    this.unsubscribeFromTopic(roomId, language);
+  // Subscribe to a specific topic with dynamic destination
+  subscribeToTopic = (destination: string, callback: (message: any) => void) => {
+    // Unsubscribe from the same topic if already subscribed to avoid duplicate subscriptions
+    this.unsubscribeFromTopic(destination);
 
     const subscription = this.client.subscribe(destination, (message) => {
       if (message.body) {
@@ -49,22 +45,22 @@ class WebSocketService {
   };
 
   // Unsubscribe from a specific topic
-  unsubscribeFromTopic = (roomId: string, language: string) => {
-    const destination = `/topic/roomCode/${roomId}/${language}`;
-
+  unsubscribeFromTopic = (destination: string) => {
     if (this.subscriptions.has(destination)) {
       this.subscriptions.get(destination)?.unsubscribe(); // Unsubscribe from topic
       this.subscriptions.delete(destination); // Remove from subscriptions map
     }
   };
 
-  sendMessage = (message: CodeMessage) => {
+  // Send a message to a specific destination with dynamic body
+  sendMessage = (destination: string, messageBody: any) => {
     this.client.publish({
-      destination: '/app/sendCodeLineOperation',
-      body: JSON.stringify(message),
+      destination,
+      body: JSON.stringify(messageBody),
     });
   };
 
+  // Disconnect from WebSocket and clean up subscriptions
   disconnect = () => {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.subscriptions.clear();

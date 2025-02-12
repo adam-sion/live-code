@@ -189,7 +189,7 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
     debounce((value: string | undefined) => {
       setCode(value || "");
 
-      WebSocketService.sendMessage({ roomName: selectedRoom!! , language: progLang?.name!!, code: value || "" });
+      WebSocketService.sendMessage("/app/sendCodeLineOperation", { roomName: selectedRoom!! , language: progLang?.name!!, code: value || "" });
     }, 400),
     [selectedRoom, progLang]
   );
@@ -250,26 +250,48 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
     WebSocketService.connect(() => {
       console.log("Connected to WebSocket!");
   
-      // Subscribe to the selected room and language
+      // Subscribe to the selected room and language if selected
       if (selectedRoom && progLang?.name) {
-        console.log("subscribing");
-        WebSocketService.subscribeToTopic(selectedRoom, progLang.name, (message) => {
+        console.log("Subscribing to room and language:", selectedRoom, progLang.name);
+        WebSocketService.subscribeToTopic(`/topic/roomCode/${selectedRoom}/${progLang.name}`, (message) => {
           console.log("Received message:", message);
           setCode(message.code);
         });
       }
+  
+      // Assuming `rooms` is the list of rooms the user belongs to, and `role` is the user's role in that room
+      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN"); // Filter rooms where user is an ADMIN
+  
+      if (roomsUserIsAdminOf) {
+      roomsUserIsAdminOf.forEach((roomUser) => {
+        console.log("Subscribing to joinRoom for:", roomUser.room.name); // Assuming `roomName` is the room identifier
+        WebSocketService.subscribeToTopic(`/topic/${roomUser.room.name}/joinRoom`, (message) => {
+          console.log("Join room message:", message);
+          // Handle the message (e.g., update UI or handle join event)
+        });
+      });
+    }
     });
   
     return () => {
-      // Cleanup interval
+      // Cleanup interval and WebSocket subscriptions
       clearInterval(intervalId);
   
-      // Unsubscribe from WebSocket topic
+      // Unsubscribe from the selected room and language when component unmounts or when room changes
       if (selectedRoom && progLang?.name) {
-        WebSocketService.unsubscribeFromTopic(selectedRoom, progLang.name);
+        WebSocketService.unsubscribeFromTopic(`/topic/roomCode/${selectedRoom}/${progLang.name}`);
       }
+  
+      // Unsubscribe from all joinRoom topics for rooms the user has an ADMIN role
+      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN");// Filter rooms where user is an ADMIN
+      if (roomsUserIsAdminOf) {
+      roomsUserIsAdminOf.forEach((roomUser) => {
+        WebSocketService.unsubscribeFromTopic(`/topic/${roomUser.room.name}/joinRoom`);
+      });
+    }
     };
-  }, [selectedRoom, progLang?.name]); // Re-run effect when selectedRoom or progLang.name changes
+  }, [selectedRoom, progLang?.name, user?.roomUsers]); // Re-run effect when selectedRoom, progLang.name, or rooms change
+  
   
 
 
