@@ -1,16 +1,16 @@
 // src/services/WebSocketService.ts
-import { Client } from '@stomp/stompjs';
+import { Client, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { CodeMessage } from '../types/Code';
 
 class WebSocketService {
   private client: Client;
+  private subscriptions: Map<string, StompSubscription> = new Map(); // Store active subscriptions
 
   constructor() {
     this.client = new Client({
       brokerURL: 'http://localhost:8080/ws', // Replace with your WebSocket endpoint
       connectHeaders: {
-        // Add cookies here (if any are available in the document)
         Cookie: document.cookie, // Sends all cookies available for the domain
       },
       debug: (str) => {
@@ -21,23 +21,44 @@ class WebSocketService {
     });
   }
 
-  // Connect to WebSocket
+  // Connect to WebSocket, only activates if not already active
   connect = (onConnect: () => void) => {
-    this.client.onConnect = onConnect;
-    this.client.activate();
+    if (!this.client.active) { // Only activate if not already active
+      this.client.onConnect = onConnect;
+      this.client.activate();
+    } else {
+      onConnect(); // Call the onConnect callback immediately if already active
+    }
   };
 
   // Subscribe to a specific topic
   subscribeToTopic = (roomId: string, language: string, callback: (message: any) => void) => {
     const destination = `/topic/roomCode/${roomId}/${language}`;
-    this.client.subscribe(destination, (message) => {
+
+    // Unsubscribe if already subscribed to avoid duplicate subscriptions
+    this.unsubscribeFromTopic(roomId, language);
+
+    const subscription = this.client.subscribe(destination, (message) => {
       if (message.body) {
         callback(JSON.parse(message.body));
       }
     });
+
+    // Store the new subscription
+    this.subscriptions.set(destination, subscription);
   };
 
-  sendMessage = (message:CodeMessage) => {
+  // Unsubscribe from a specific topic
+  unsubscribeFromTopic = (roomId: string, language: string) => {
+    const destination = `/topic/roomCode/${roomId}/${language}`;
+
+    if (this.subscriptions.has(destination)) {
+      this.subscriptions.get(destination)?.unsubscribe(); // Unsubscribe from topic
+      this.subscriptions.delete(destination); // Remove from subscriptions map
+    }
+  };
+
+  sendMessage = (message: CodeMessage) => {
     this.client.publish({
       destination: '/app/sendCodeLineOperation',
       body: JSON.stringify(message),
@@ -45,6 +66,8 @@ class WebSocketService {
   };
 
   disconnect = () => {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscriptions.clear();
     this.client.deactivate();
   };
 }

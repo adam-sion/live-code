@@ -227,41 +227,52 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
   };
   
 
-
   useEffect(() => {
+    // Function to update the time and date
     const updateDateTime = () => {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, "0");
       const minutes = String(now.getMinutes()).padStart(2, "0");
       const seconds = String(now.getSeconds()).padStart(2, "0");
-
+  
       const currentTime = `${hours}:${minutes}:${seconds}`;
       const currentDate = now.toISOString().split("T")[0];
-
+  
       setTime(currentTime);
       setDate(currentDate);
     };
-
-    WebSocketService.connect(() => {
-      console.log('Connected to WebSocket!');
-      
   
-      WebSocketService.subscribeToTopic("testroom1", 'python', (message) => {
-        console.log('Received message:', message);
-        setCode(message.code);
-      });
+    // Start interval to update time every second
+    const intervalId = setInterval(updateDateTime, 1000);
+    updateDateTime(); // Call immediately to avoid 1-second delay
+  
+    // Connect to WebSocket
+    WebSocketService.connect(() => {
+      console.log("Connected to WebSocket!");
+  
+      // Subscribe to the selected room and language
+      if (selectedRoom && progLang?.name) {
+        console.log("subscribing");
+        WebSocketService.subscribeToTopic(selectedRoom, progLang.name, (message) => {
+          console.log("Received message:", message);
+          setCode(message.code);
+        });
+      }
     });
-
-
-    // Update time and date every second
-    const interval = setInterval(updateDateTime, 1000);
-
-    // Cleanup interval on component unmount
+  
     return () => {
-      clearInterval(interval);
-      WebSocketService.disconnect();
-    }
-  }, []);
+      // Cleanup interval
+      clearInterval(intervalId);
+  
+      // Unsubscribe from WebSocket topic
+      if (selectedRoom && progLang?.name) {
+        WebSocketService.unsubscribeFromTopic(selectedRoom, progLang.name);
+      }
+    };
+  }, [selectedRoom, progLang?.name]); // Re-run effect when selectedRoom or progLang.name changes
+  
+
+
 
   return (
     <Box
