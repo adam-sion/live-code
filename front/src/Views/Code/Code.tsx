@@ -1,7 +1,8 @@
 import { Editor } from "@monaco-editor/react";
+import ReplyIcon from '@mui/icons-material/Reply';
 import debounce from "lodash-es/debounce";
 import { FC, useCallback, useEffect, useState } from "react";
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography, useRadioGroup } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, Grid, Grid2, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Paper, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography, useRadioGroup } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Bolt, Close, ConnectWithoutContact, Home, Login } from "@mui/icons-material";
@@ -20,6 +21,11 @@ import WebSocketService from "../../webscoket/WebSocketService";
 import { toast } from "react-toastify";
 import { useGetCode } from "../../api/hooks/useGetCode";
 import { useSetRoomUserActive } from "../../api/hooks/useSetRoomUserActive";
+import backg from "../../assets/backg.webp"
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -95,9 +101,9 @@ const requestRow = (props: ListChildComponentProps)=> {
   component="div"
   disablePadding
 >
-  <ListItemButton
+  <ListItem
     style={{
-      backgroundColor: "rgba(131, 114, 114, 0.1)",
+      backgroundColor: "rgba(205, 196, 196, 0.1)",
       padding: "0 8px", // Adjust as needed for consistency
     }}
   >
@@ -112,7 +118,7 @@ const requestRow = (props: ListChildComponentProps)=> {
         </IconButton>
       
     
-  </ListItemButton>
+  </ListItem>
 </ListItem>
 
   );
@@ -184,6 +190,7 @@ const handleCreateRoom = async (room:FormData)=> {
 }
 
 const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
+const [currentTab, setCurrentTab] = useState<number>(0);
 
   const handleEditorChange = useCallback(
     debounce((value: string | undefined) => {
@@ -301,7 +308,7 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
       sx={{
         height:'100%',
       
-     minHeight:'100%',
+     minHeight:'100vh',
         display: "flex",
         flexDirection: "column",
         backgroundColor:"rgba(0,0,0,0.1)",
@@ -411,13 +418,14 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
   <Box
     sx={{
       paddingTop:2,
-      flex: 1, // Take equal width
+      flex: 1, 
+      minHeight:'100%'// Take equal width
     }}
   >
 
   {
     selectedRoom !== undefined ? <Editor
-    height={'91vh'}
+    height={'100%'}
        // Fill parent container height
        // Fill parent container width
       language={progLang?.name}
@@ -456,50 +464,230 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
   </Box>
   <Box
     sx={{
-
-      flex: 1, // Take equal width
+   
+      width:{lg:'40%', sm:'100%'},
       display: "flex", // Optional: for content alignment inside this box
       flexDirection:"column",
-      gap:3,
-      padding:3
+      alignItems:'center',
+     justifyContent:'center',
+      gap:3
     }}
   >
-   <Box sx = {{ display:"flex", flexWrap:'wrap', justifyContent:'center', padding:2, paddingBottom:5, gap:10}}>
-   
- <Box sx={{display:'flex', flexDirection:'column', gap:1.5}}>
- <Box
+<Paper
+  sx={{
+    borderRadius: '12px',
+    padding: 4,
+    gap: 10,
+    width: '70%',
+    backgroundImage: `url(${backg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+>
+    {
+      currentTab === 0 ? 
+(
+      <Grid container spacing={4} columns={2}>
+        <Grid item xs={2}>
+          <ListItemButton
+          onClick={()=> setCurrentTab(1)}
+            sx={{
+              height: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f0f0f0",
+              transition: "background-color 0.3s ease, transform 0.2s ease", // Smooth transition
+    "&:hover": {
+      backgroundColor: "#e0e0e0", // Lighter background on hover
+      transform: "scale(1.05)", // Slight scale-up effect
+    },
+    "&:active": {
+      transform: "scale(0.95)", // Press-down effect
+    },
+            }}
+          >
+            <Box
             sx={{   
               textAlign:'center',
-                fontSize: '20px',
-                m: 1,
+                fontSize: '30px',
+               
                 color: 'black',
-                padding:1,
-              boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
-              borderRadius:'12px',
+              
+          
                 fontFamily: 'Gill Sans, Verdana',
-                fontWeight: 'bold',
+            
                
             }}
         >
+        
+         
            My Rooms
+           <IconButton>
+          <MeetingRoomIcon sx={{color:'black', marginLeft:'10px'}}/>
+          </IconButton>
           
         </Box>
+          </ListItemButton>
+        </Grid>
 
- <FixedSizeList
- style={{  overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 300 ? "auto" : "hidden"}}
-        height={user? user.roomUsers.length*46: 0}
-        width={360}
-        itemSize={(46)}
-        itemCount={(user?.roomUsers.length ? user.roomUsers.length :0)}
-        overscanCount={5}
-      >
-        {renderRow}
-      </FixedSizeList>
+        <Grid item xs={2}>
+          <ListItemButton
+          onClick={()=> setCurrentTab(2)}
+            sx={{
+              height: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f0f0f0",
+              transition: "background-color 0.3s ease, transform 0.2s ease", // Smooth transition
+              "&:hover": {
+                backgroundColor: "#e0e0e0", // Lighter background on hover
+                transform: "scale(1.05)", // Slight scale-up effect
+              },
+              "&:active": {
+                transform: "scale(0.95)", // Press-down effect
+              },
+            }}
+          >
+            <Box
+            sx={{   
+              textAlign:'center',
+                    fontSize: '30px',
+               
+                color: 'black',
+              
+          
+                fontFamily: 'Gill Sans, Verdana',
+            
+               
+            }}
+        >
+           Date & Time
+           <IconButton>
+          <CalendarMonthIcon sx={{color:'black', marginLeft:'10px'}}/>
+          </IconButton>
+          
+          
+        </Box>
+          </ListItemButton>
+        </Grid>
 
+        <Grid item xs={2}>
+          <ListItemButton
+          onClick={()=> setCurrentTab(3)}
+            sx={{
+              height: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f0f0f0",
+              transition: "background-color 0.3s ease, transform 0.2s ease", // Smooth transition
+              "&:hover": {
+                backgroundColor: "#e0e0e0", // Lighter background on hover
+                transform: "scale(1.05)", // Slight scale-up effect
+              },
+              "&:active": {
+                transform: "scale(0.95)", // Press-down effect
+              },
+            }}
+          >
+            <Box
+            sx={{   
+              textAlign:'center',
+              fontSize: '30px',
+               
+                color: 'black',
+              
+          
+                fontFamily: 'Gill Sans, Verdana',
+            
+               
+            }}
+        >
+         Join/Create room
+         <IconButton>
+          <DriveFileRenameOutlineIcon sx={{color:'black', marginLeft:'10px'}}/>
+          </IconButton>
+          
+          
+        </Box>
+          </ListItemButton>
+        </Grid>
 
- </Box>
-  <Box sx={{display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'center', gap:5}}>
-   <Box
+        <Grid item xs={2}>
+          <ListItemButton
+          onClick={()=> setCurrentTab(4)}
+          
+            sx={{
+              height: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f0f0f0",
+              transition: "background-color 0.3s ease, transform 0.2s ease", // Smooth transition
+              "&:hover": {
+                backgroundColor: "#e0e0e0", // Lighter background on hover
+                transform: "scale(1.05)", // Slight scale-up effect
+              },
+              "&:active": {
+                transform: "scale(0.95)", // Press-down effect
+              },
+            }}
+          >
+            <Box
+            sx={{   
+              textAlign:'center',
+              fontSize: '30px',
+               
+                color: 'black',
+              
+          
+                fontFamily: 'Gill Sans, Verdana',
+            
+               
+            }}
+        >
+           User requests
+
+           <IconButton>
+          <ContactEmergencyIcon sx={{color:'black', marginLeft:'10px'}}/>
+          </IconButton>
+
+          
+        </Box>
+          </ListItemButton>
+        </Grid>
+    
+    </Grid>)
+     : (
+    <Box>
+      <Box>
+        <IconButton onClick={()=> setCurrentTab(0)}>
+<ReplyIcon sx={{color:'black', fontSize:'40px'}}/>
+</IconButton>
+</Box>
+    {currentTab === 1 ?
+    (
+      <div style={{display:'flex', justifyContent:'center'}}>
+      {/* //my rooms */}
+<FixedSizeList
+
+style={{ overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 300 ? "auto" : "hidden"}}
+       height={user? user.roomUsers.length*46: 0}
+       width={360}
+       itemSize={(46)}
+       itemCount={(user?.roomUsers.length ? user.roomUsers.length :0)}
+       overscanCount={5}
+     >
+       {renderRow}
+     </FixedSizeList>
+     </div>
+    ) :
+    currentTab === 2 ? 
+    (
+      <Box sx={{display:'flex', justifyContent:'center'}}>
+      <Box
       sx={{
         height: "100px",
         width: "300px",
@@ -542,7 +730,7 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
             }}
         >
           {time}
-      
+    
         </Box>
         <Box
             sx={{
@@ -565,57 +753,41 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
         </Box>
         
     </Box>
-    
-    <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
-    <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <Typography component="span">Join room</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-        
-<RoomForm method="Join" onSubmit={handleJoinRoom}/>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <Typography component="span">Create room</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-        <RoomForm method="Create" onSubmit={handleCreateRoom}/>
-        </AccordionDetails>
-      </Accordion>
-      </Box>
-
-   
     </Box>
- <Box sx={{display:'flex', flexDirection:'column', gap:1.5}}>
- <Box
-            sx={{
-              
-              textAlign:'center',
-              borderRadius:'12px',
-              fontSize: '20px',
-                m: 1,
-                color: 'black',
-                padding:1,
-              boxShadow: "0 0 15px 5px rgba(154, 162, 164, 0.7)",
-                fontFamily: 'Gill Sans, Verdana',
-                fontWeight: 'bold',
-             
-            }}
-        >
-           Users requests
+    ) : currentTab === 3 ?
+    (
+      <Box sx={{display:'flex', flexDirection:'column', gap:2}}>
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <Typography component="span">Join room</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          
+  <RoomForm method="Join" onSubmit={handleJoinRoom}/>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
+          >
+            <Typography component="span">Create room</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <RoomForm method="Create" onSubmit={handleCreateRoom}/>
+          </AccordionDetails>
+        </Accordion>
         </Box>
+    ) :
+  (
+    <Box sx={{display:'flex', justifyContent:'center'}}>
 
- <FixedSizeList
+<FixedSizeList
  style={{  overflowY: 6 * 46 > 300 ? "auto" : "hidden"}}
         height={6*46}
         width={360}
@@ -626,13 +798,15 @@ const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
         {requestRow}
       </FixedSizeList>
 
-
- </Box>
+    </Box>
+  )
+}
+  </Box>
+  )  }
+    </Paper>
 
    </Box>
-   
-
-</Box>
+  
 </Box>
 <Drawer
      ModalProps={{
