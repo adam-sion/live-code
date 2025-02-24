@@ -31,6 +31,9 @@ class WebSocketService {
 
   // Subscribe to a specific topic with dynamic destination
   subscribeToTopic = (destination: string, callback: (message: any) => void) => {
+    if (!this.client.connected) {
+      return;
+    }
     // Unsubscribe from the same topic if already subscribed to avoid duplicate subscriptions
     this.unsubscribeFromTopic(destination);
 
@@ -38,7 +41,7 @@ class WebSocketService {
       if (message.body) {
         callback(JSON.parse(message.body));
       }
-    });
+    }); 
 
     // Store the new subscription
     this.subscriptions.set(destination, subscription);

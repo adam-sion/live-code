@@ -165,15 +165,15 @@ const requestRow = (props: ListChildComponentProps)=> {
   >
     <ListItemText primary={roomUserRequests.length > 0 ? `request #${roomUserRequests[index]?.id}, with status ${roomUserRequests[index].status}` : <></>} />
    
-        <IconButton aria-label="confirm" color="success" size="small" onClick={()=> {
-          handleRoomUserRequest({status:'accepted', roomUserRequestId:roomUserRequests[index]?.id});
+        <IconButton aria-label="confirm" color="success" size="small" onClick={async()=> {
+          await handleRoomUserRequest({status:'accepted', roomUserRequestId:roomUserRequests[index]?.id});
           getReqs();
         }
         }>
           <TaskAltIcon />
         </IconButton>
-        <IconButton aria-label="confirm" color="error" size="small" onClick={()=>{
-         handleRoomUserRequest({status:'declined', roomUserRequestId:roomUserRequests[index]?.id});
+        <IconButton aria-label="confirm" color="error" size="small" onClick={async()=>{
+         await handleRoomUserRequest({status:'declined', roomUserRequestId:roomUserRequests[index]?.id});
          getReqs();
         }
         }>
@@ -263,8 +263,9 @@ const [currentTab, setCurrentTab] = useState<number>(0);
   };
 
   const getReqs = async ()=> {
-    setRoomUserRequests(await getAll(user?.id!!));
-    console.log("got reqs");
+    const reqs = await getAll(user?.id!!);
+    setRoomUserRequests(reqs);
+    console.log(reqs);
   }
 
   useEffect(() => {
@@ -843,7 +844,7 @@ style={{ overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 
 
 <FixedSizeList
 style={{ overflowY: (user?.roomUserRequests.length ? user.roomUserRequests.length :46) * 46 > 300 ? "auto" : "hidden"}}
-height={user? user.roomUserRequests.length*46: 0}
+height={user? roomUserRequests.length*46: 0}
 width={360}
 itemSize={(46)}
 itemCount={(roomUserRequests.filter(roomUserRequest=> roomUserRequest.status == 'pending').length)}
