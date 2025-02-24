@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { FormData, RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
-import { Room, RoomUser, User } from "../../types/Code";
+import { Room, RoomUser, RoomUserRequest, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
@@ -26,6 +26,7 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import { useJoinRoomRequest } from "../../api/useJoinRoom";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -87,53 +88,21 @@ const IOSSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-const requestRow = (props: ListChildComponentProps)=> {
-  const { index, style } = props;
-
-  return (
-   <ListItem
-  style={{
-    ...style,
-    padding: 0, // Remove additional padding
-    margin: 0, // Remove extra margin
-  }}
-  key={index}
-  component="div"
-  disablePadding
->
-  <ListItem
-    style={{
-      backgroundColor: "rgba(205, 196, 196, 0.1)",
-      padding: "0 8px", // Adjust as needed for consistency
-    }}
-  >
-    <ListItemText primary={`Item ${index + 1}`} />
-   
-      
-        <IconButton aria-label="confirm" color="success" size="small">
-          <TaskAltIcon />
-        </IconButton>
-        <IconButton aria-label="confirm" color="error" size="small">
-          <CloseIcon />
-        </IconButton>
-      
-    
-  </ListItem>
-</ListItem>
-
-  );
-}
 
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
   const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
+  const [roomUserRequests, setRoomUserRequests] = useState<RoomUserRequest[]>([]);
  const {user, setUser, getUser} = useAuth();
 const {addRoom} = useCreateRoom();
 const {setActive} = useSetRoomUserActive();
+const {createRoomUserRequest, handleRoomUserRequest, getAll} = useJoinRoomRequest();
 const {getCode} = useGetCode();
 
 const handleJoinRoom = async (room:FormData)=> {
-  
+  WebSocketService.sendMessage("/app/joinRoom", { roomName: room.roomName, userId:user?.id });
+  createRoomUserRequest({roomName: room.roomName, userId:user?.id!!});
+  getUser();
 }
 
 const renderRow = (props: ListChildComponentProps)=> {
@@ -156,11 +125,56 @@ const renderRow = (props: ListChildComponentProps)=> {
      }}
    >
     <ListItemText primary={user?.roomUsers[index]?.room?.name}/>
-    <IOSSwitch name={`${index}`} checked={user?.roomUsers[index]?.active} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
+    <IOSSwitch name={`${index}`} checked={user?.roomUsers[index]?.active || false} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
     </ListItem>
  </ListItem>
   )
 }
+
+const requestRow = (props: ListChildComponentProps)=> {
+  const { index, style } = props;
+
+  return (
+   <ListItem
+  style={{
+    ...style,
+    padding: 0, // Remove additional padding
+    margin: 0, // Remove extra margin
+  }}
+  key={index}
+  component="div"
+  disablePadding
+>
+  <ListItem
+    style={{
+      backgroundColor: "rgba(205, 196, 196, 0.1)",
+      padding: "0 8px", // Adjust as needed for consistency
+    }}
+  >
+    <ListItemText primary={roomUserRequests.length > 0 ? `request #${roomUserRequests[index]?.id}, with status ${roomUserRequests[index].status}` : <></>} />
+   
+        <IconButton aria-label="confirm" color="success" size="small" onClick={()=> {
+          handleRoomUserRequest({status:'accepted', roomUserRequestId:roomUserRequests[index]?.id});
+          getReqs();
+        }
+        }>
+          <TaskAltIcon />
+        </IconButton>
+        <IconButton aria-label="confirm" color="error" size="small" onClick={()=>{
+         handleRoomUserRequest({status:'declined', roomUserRequestId:roomUserRequests[index]?.id});
+         getReqs();
+        }
+        }>
+          <CloseIcon />
+        </IconButton>
+      
+    
+  </ListItem>
+</ListItem>
+
+  );
+}
+
 const handleToggleRoomActive = async (index: number) => {
   if (!user) return;
 
@@ -225,17 +239,16 @@ const [currentTab, setCurrentTab] = useState<number>(0);
   const [date, setDate] = useState<string>("");
 
 
-
-
-
   const handleChange = async (event: React.SyntheticEvent, newValue: string) => {
     setSelectedRoom(newValue);
     setCode(await getCode(newValue, progLang?.name!!))
   };
-  
+
+  const getReqs = async ()=> {
+    setRoomUserRequests(await getAll(user?.id!!));
+  }
 
   useEffect(() => {
-    // Function to update the time and date
     const updateDateTime = () => {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, "0");
@@ -253,6 +266,8 @@ const [currentTab, setCurrentTab] = useState<number>(0);
     const intervalId = setInterval(updateDateTime, 1000);
     updateDateTime(); // Call immediately to avoid 1-second delay
   
+   
+
     // Connect to WebSocket
     WebSocketService.connect(() => {
       console.log("Connected to WebSocket!");
@@ -273,12 +288,31 @@ const [currentTab, setCurrentTab] = useState<number>(0);
       roomsUserIsAdminOf.forEach((roomUser) => {
         console.log("Subscribing to joinRoom for:", roomUser.room.name); // Assuming `roomName` is the room identifier
         WebSocketService.subscribeToTopic(`/topic/${roomUser.room.name}/joinRoom`, (message) => {
+          toast.info(
+            <div style={{ fontSize: "1.2rem", padding: "10px", lineHeight: "1.5" }}>
+              <strong>📩 Received request from user:</strong> {message.userId} <br />
+              <strong>🏠 Room:</strong> {message.roomName}
+            </div>,
+            {
+              autoClose: 7000, // Longer duration (7 seconds)
+              position: "top-right",
+              theme: "colored",
+              style: {
+                width: "400px", // Make it wider
+                padding: "15px",
+                fontSize: "1.2rem",
+              },
+            }
+          );
+          getReqs();
           console.log("Join room message:", message);
           // Handle the message (e.g., update UI or handle join event)
         });
       });
     }
     });
+
+    getReqs();
   
     return () => {
       // Cleanup interval and WebSocket subscriptions
@@ -426,6 +460,7 @@ const [currentTab, setCurrentTab] = useState<number>(0);
   {
     selectedRoom !== undefined ? <Editor
     height={'100%'}
+    
        // Fill parent container height
        // Fill parent container width
       language={progLang?.name}
@@ -788,12 +823,12 @@ style={{ overflowY: (user?.roomUsers.length ? user.roomUsers.length :46) * 46 > 
     <Box sx={{display:'flex', justifyContent:'center'}}>
 
 <FixedSizeList
- style={{  overflowY: 6 * 46 > 300 ? "auto" : "hidden"}}
-        height={6*46}
-        width={360}
-        itemSize={46}
-        itemCount={6}
-        overscanCount={5}
+style={{ overflowY: (user?.roomUserRequests.length ? user.roomUserRequests.length :46) * 46 > 300 ? "auto" : "hidden"}}
+height={user? user.roomUserRequests.length*46: 0}
+width={360}
+itemSize={(46)}
+itemCount={(roomUserRequests.filter(roomUserRequest=> roomUserRequest.status == 'pending').length)}
+overscanCount={5}
       >
         {requestRow}
       </FixedSizeList>

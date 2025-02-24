@@ -2,7 +2,8 @@ export type User = {
     id:number,
     username:string,
     email:string,
-    roomUsers:RoomUser[]
+    roomUsers:RoomUser[],
+    roomUserRequests: RoomUserRequest[]
 }
 
 export type RoomUser = {
@@ -17,6 +18,11 @@ export type RoomUserId = {
     userId:number
 }
 
+export type RoomUserRequest = {
+    id: number,
+    status: string
+}
+
 
 export type Room =  {
     name:string,
@@ -28,4 +34,14 @@ export type CodeMessage  = {
     roomName: string, 
     language: string, 
     code: string;
+}
+
+export type JoinRoom = {
+    roomName: string,
+    userId: number
+}
+
+export type HandleRoomUserRequest = {
+    roomUserRequestId: number,
+    status: string
 }

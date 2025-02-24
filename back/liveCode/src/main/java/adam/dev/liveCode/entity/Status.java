@@ -1,13 +1,13 @@
 package adam.dev.liveCode.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.ToString;
 
 @AllArgsConstructor
 @ToString
-public enum Role {
+public enum Status {
 
-    USER, ADMIN
+pending, accepted, declined
 
 }
+

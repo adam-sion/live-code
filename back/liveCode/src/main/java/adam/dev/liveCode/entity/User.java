@@ -1,16 +1,16 @@
 package adam.dev.liveCode.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name="users")
@@ -35,11 +35,17 @@ public class User {
     @Column
     private String email;
 
-    @JsonManagedReference(value = "1")
+    @JsonManagedReference(value = "user-roomUsers")
     @OneToMany(mappedBy = "user")
     private List<RoomUser> roomUsers;
 
+    @JsonManagedReference(value = "user-roomUserRequests")
     @OneToMany(mappedBy = "requestedUser")
     private List<RoomUserRequest> roomUserRequests;
+
+    @Override
+    public String toString() {
+        return String.format("User{ id: %s, username: %s, password: %s, email: %s, roomUsers: %s, roomUserRequests: %s}", id, username, password, email, roomUsers, roomUserRequests);
+    }
 
 }

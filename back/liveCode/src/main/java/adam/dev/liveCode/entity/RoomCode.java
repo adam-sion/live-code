@@ -1,11 +1,12 @@
 package adam.dev.liveCode.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "room_code")
 public class RoomCode {
