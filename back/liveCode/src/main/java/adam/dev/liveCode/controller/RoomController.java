@@ -11,10 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -30,6 +27,15 @@ public class RoomController {
 
         return new ResponseEntity<>(roomDTO, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{roomName}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable String roomName) {
+        roomService.deleteRoom(roomName);
+
+        return ResponseEntity.noContent()
+                .build();
+    }
+
 
     @MessageMapping("/joinRoom")
     public void joinRoom(JoinRoomDTO joinRoomDTO) {

@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +46,7 @@ public class RoomUserRequestService {
     }
 
     @Transactional
-    public void handleRoomUserRequest(RoomUserRequestDTO roomUserRequestDTO) {
+    public RoomUserRequest handleRoomUserRequest(RoomUserRequestDTO roomUserRequestDTO) {
         Long roomUserRequestId = roomUserRequestDTO.getRoomUserRequestId();
         Status status = roomUserRequestDTO.getStatus();
         RoomUserRequest roomUserRequest = roomUserRequestRepository.findById(roomUserRequestId)
@@ -79,7 +78,7 @@ public class RoomUserRequestService {
                 throw new IllegalArgumentException("Invalid handle roomUserRequest status");
         }
 
-        roomUserRequestRepository.save(roomUserRequest);
+        return roomUserRequestRepository.save(roomUserRequest);
     }
 
 }

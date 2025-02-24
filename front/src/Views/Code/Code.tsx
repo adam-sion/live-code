@@ -2,10 +2,11 @@ import { Editor } from "@monaco-editor/react";
 import ReplyIcon from '@mui/icons-material/Reply';
 import debounce from "lodash-es/debounce";
 import { FC, useCallback, useEffect, useState } from "react";
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, Grid, Grid2, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Paper, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography, useRadioGroup } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Bolt, Close, ConnectWithoutContact, Home, Login } from "@mui/icons-material";
+import { Bolt, Close, ConnectWithoutContact, Home, Login, Remove } from "@mui/icons-material";
 import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -27,6 +28,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import { useJoinRoomRequest } from "../../api/useJoinRoom";
+import { useDeleteRoom } from "../../api/hooks/useDeleteRoom";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -95,6 +97,7 @@ export const Code: FC = () => {
   const [roomUserRequests, setRoomUserRequests] = useState<RoomUserRequest[]>([]);
  const {user, setUser, getUser} = useAuth();
 const {addRoom} = useCreateRoom();
+const {deleteRoom} = useDeleteRoom();
 const {setActive} = useSetRoomUserActive();
 const {createRoomUserRequest, handleRoomUserRequest, getAll} = useJoinRoomRequest();
 const {getCode} = useGetCode();
@@ -102,7 +105,11 @@ const {getCode} = useGetCode();
 const handleJoinRoom = async (room:FormData)=> {
   WebSocketService.sendMessage("/app/joinRoom", { roomName: room.roomName, userId:user?.id });
   createRoomUserRequest({roomName: room.roomName, userId:user?.id!!});
-  getUser();
+  WebSocketService.subscribeToTopic(`/topic/pending/${user?.id}`, (message) => {
+      toast.info("Your join room reuqest has been " + message.status);
+      getUser();
+  });
+  
 }
 
 const renderRow = (props: ListChildComponentProps)=> {
@@ -125,6 +132,11 @@ const renderRow = (props: ListChildComponentProps)=> {
      }}
    >
     <ListItemText primary={user?.roomUsers[index]?.room?.name}/>
+    
+    <IconButton onClick={()=> handleDeleteRoom(user?.roomUsers[index]?.room?.name!!)}>
+      {user?.roomUsers[index].role === 'ADMIN' ? <RemoveCircleOutlineIcon sx={{color:'red', marginRight:'10px'}}/>: <></> }
+
+    </IconButton>
     <IOSSwitch name={`${index}`} checked={user?.roomUsers[index]?.active || false} onChange={() => handleToggleRoomActive(index)}></IOSSwitch>
     </ListItem>
  </ListItem>
@@ -203,6 +215,12 @@ const handleCreateRoom = async (room:FormData)=> {
    
 }
 
+const handleDeleteRoom = async (roomName:string)=> {
+  await deleteRoom(roomName);
+    await getUser();
+   
+}
+
 const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
 const [currentTab, setCurrentTab] = useState<number>(0);
 
@@ -246,6 +264,7 @@ const [currentTab, setCurrentTab] = useState<number>(0);
 
   const getReqs = async ()=> {
     setRoomUserRequests(await getAll(user?.id!!));
+    console.log("got reqs");
   }
 
   useEffect(() => {

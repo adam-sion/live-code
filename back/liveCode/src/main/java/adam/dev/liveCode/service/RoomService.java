@@ -51,4 +51,9 @@ public class RoomService {
                 .orElseThrow(()->  new EntityNotFoundException("Room not found"));
     }
 
+    public void deleteRoom(String roomName) {
+        Room room = findByName(roomName);
+        roomRepository.delete(room);
+    }
+
 }
