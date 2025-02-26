@@ -33,7 +33,7 @@ public class RoomUserRequestController {
 
     @GetMapping("/{adminId}")
     public List<RoomUserRequest> getRoomUserRequests(@PathVariable Long adminId) {
-       List<RoomUserRequest> reqs =  roomUserRequestService.getAllRoomUserRequests(adminId);
+       List<RoomUserRequest> reqs = roomUserRequestService.getAllRoomUserRequests(adminId);
         System.out.println(reqs);
         return reqs;
     }

@@ -45,3 +45,19 @@ export type HandleRoomUserRequest = {
     roomUserRequestId: number,
     status: string
 }
+
+export type CompileCode  = {
+    language: string, 
+    code: string;
+}
+
+export type ProgLang = {
+    name:string, 
+    img:string, 
+    compName:string
+}
+
+export type CompileResult = {
+    output: string,
+    statusCode: number,
+}

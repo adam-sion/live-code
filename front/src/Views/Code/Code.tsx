@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { FormData, RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
-import { Room, RoomUser, RoomUserRequest, User } from "../../types/Code";
+import { CompileResult, ProgLang, Room, RoomUser, RoomUserRequest, User } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
@@ -29,6 +29,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import { useJoinRoomRequest } from "../../api/useJoinRoom";
 import { useDeleteRoom } from "../../api/hooks/useDeleteRoom";
+import { useCompileCode } from "../../api/hooks/useCompileCode";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -93,7 +94,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
 
 export const Code: FC = () => {
   const [code, setCode] = useState("// Write your code here...");
-  const [progLang, setProgLang] = useState<{ name: string; img: string } | undefined>(progLangs[0]);
+  const [progLang, setProgLang] = useState<ProgLang| undefined>(progLangs[0]);
   const [roomUserRequests, setRoomUserRequests] = useState<RoomUserRequest[]>([]);
  const {user, setUser, getUser} = useAuth();
 const {addRoom} = useCreateRoom();
@@ -223,6 +224,7 @@ const handleDeleteRoom = async (roomName:string)=> {
 
 const [selectedRoom, setSelectedRoom] = useState<string|undefined>(undefined);
 const [currentTab, setCurrentTab] = useState<number>(0);
+const {compile} = useCompileCode();
 
   const handleEditorChange = useCallback(
     debounce((value: string | undefined) => {
@@ -241,13 +243,21 @@ const [currentTab, setCurrentTab] = useState<number>(0);
   const [isConsoleOpen, setConsoleOpen] = useState(false);
   const [output, setOutput] = useState("");
 
-  const handleRunClick = () => {
+  const handleRunClick = async () => {
+    if (selectedRoom === undefined) {
+      toast.info("Choose room please...");
+      return;
+    }
+    setOutput("Compiling...🧑🏿‍💻");
     setConsoleOpen(true);
 
-    
-    setTimeout(() => {
-      setOutput("Compilation successful! Output:\nHello, World!");
-    }, 1000); 
+    const result:CompileResult = await compile({code:code, language:progLang?.compName!!});
+    console.log(result);
+    if (result.statusCode === 200) {
+      setOutput(`Compilation successful! Output:\n${result.output}`);
+    } else {
+      setOutput(`Compilation failed! Output:\n${result.output}`);
+    }
   };
 
   const handleCloseConsole = () => {
@@ -263,9 +273,11 @@ const [currentTab, setCurrentTab] = useState<number>(0);
   };
 
   const getReqs = async ()=> {
+    if (user?.id) {
     const reqs = await getAll(user?.id!!);
     setRoomUserRequests(reqs);
     console.log(reqs);
+    }
   }
 
   useEffect(() => {
