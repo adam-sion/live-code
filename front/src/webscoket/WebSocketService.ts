@@ -11,7 +11,7 @@ class WebSocketService {
       connectHeaders: {
         Cookie: document.cookie, // Sends all cookies available for the domain
       },
-      debug: (str) => {
+      debug: (_str) => {
       },
       reconnectDelay: 5000, // Retry delay if connection is lost
       webSocketFactory: () => new SockJS(`${import.meta.env.VITE_SERVER_URL}/ws`), // WebSocket fallback using SockJS

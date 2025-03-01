@@ -1,10 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { FC } from "react";
-import { SubmitHandler, useForm, UseFormHandleSubmit } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { Room } from "../../types/Code";
 
 const RoomSchema = Yup.object().shape({
     roomName: Yup.string()

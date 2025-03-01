@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { FC } from "react";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
