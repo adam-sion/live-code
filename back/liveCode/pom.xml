@@ -8,6 +8,7 @@
 	<name>liveCode</name>
 	<properties>
 		<java.version>17</java.version>
+		<start-class>adam.dev.liveCode.LiveCodeApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -111,6 +112,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>adam.dev.liveCode.LiveCodeApplication</mainClass>
+					<layout>JAR</layout>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
