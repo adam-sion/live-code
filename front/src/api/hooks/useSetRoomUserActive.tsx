@@ -1,6 +1,5 @@
 import axios from "axios";
-import { Room, RoomUser, RoomUserId } from "../../types/Code";
-import { toast } from "react-toastify";
+import { RoomUserId } from "../../types/Code";
 
 
 export const useSetRoomUserActive =  ()=> {

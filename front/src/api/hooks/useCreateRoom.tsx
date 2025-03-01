@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Room } from "../../types/Code";
 import { toast } from "react-toastify";
 
 

@@ -6,7 +6,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Divider, Drawer, Grid, Grid2, IconButton, ListItem, ListItemButton, ListItemText, MenuItem, Paper, Select, SelectChangeEvent, Stack, styled, Switch, SwitchProps, Tab, Tabs, TextareaAutosize, Toolbar, Typography, useRadioGroup } from "@mui/material";
 import { progLangs } from "./data";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Bolt, Close, ConnectWithoutContact, Home, Login, Remove } from "@mui/icons-material";
+import { Bolt, Close, Home, Login } from "@mui/icons-material";
 import { FixedSizeList, ListChildComponentProps} from "react-window";
 import timePic from "../../assets/time.png";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { FormData, RoomForm } from "../../components/RoomForm/RoomForm";
 import darklogo from "../../assets/newdarklogo.png";
 import { Link } from "react-router-dom";
-import { CompileResult, ProgLang, Room, RoomUser, RoomUserRequest, User } from "../../types/Code";
+import { CompileResult, ProgLang, RoomUser, RoomUserRequest } from "../../types/Code";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCreateRoom } from "../../api/hooks/useCreateRoom";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
@@ -268,7 +268,7 @@ const {compile} = useCompileCode();
   const [date, setDate] = useState<string>("");
 
 
-  const handleChange = async (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = async (_event: React.SyntheticEvent, newValue: string) => {
     setSelectedRoom(newValue);
     setCode(await getCode(newValue, progLang?.name!!))
   };
