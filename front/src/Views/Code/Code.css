@@ -1,0 +1,10 @@
+.editor-container {
+    height: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    .editor-container {
+      height: 100vh;
+    }
+  }
+  

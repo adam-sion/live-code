@@ -7,15 +7,14 @@ class WebSocketService {
 
   constructor() {
     this.client = new Client({
-      brokerURL: 'http://localhost:8080/ws', // Replace with your WebSocket endpoint
+      brokerURL: `${import.meta.env.VITE_SERVER_URL}/ws`, // Replace with your WebSocket endpoint
       connectHeaders: {
         Cookie: document.cookie, // Sends all cookies available for the domain
       },
       debug: (str) => {
-        console.log(str);
       },
       reconnectDelay: 5000, // Retry delay if connection is lost
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'), // WebSocket fallback using SockJS
+      webSocketFactory: () => new SockJS(`${import.meta.env.VITE_SERVER_URL}/ws`), // WebSocket fallback using SockJS
     });
   }
 

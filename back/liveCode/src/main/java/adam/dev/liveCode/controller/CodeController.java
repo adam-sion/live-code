@@ -23,7 +23,6 @@ public class CodeController {
 
     @MessageMapping("/sendCodeLineOperation")
     public void sendCodeLineOperation(RoomCodeDTO message) {
-        System.out.println(message);
         roomCodeService.createOrUpdateRoomCode(
                 message.getRoomName(),
                 message.getLanguage(),

@@ -30,6 +30,7 @@ import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import { useJoinRoomRequest } from "../../api/useJoinRoom";
 import { useDeleteRoom } from "../../api/hooks/useDeleteRoom";
 import { useCompileCode } from "../../api/hooks/useCompileCode";
+import "../Code/Code.css";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -276,7 +277,6 @@ const {compile} = useCompileCode();
     if (user?.id) {
     const reqs = await getAll(user?.id!!);
     setRoomUserRequests(reqs);
-    console.log(reqs);
     }
   }
 
@@ -294,31 +294,21 @@ const {compile} = useCompileCode();
       setDate(currentDate);
     };
   
-    // Start interval to update time every second
     const intervalId = setInterval(updateDateTime, 1000);
     updateDateTime(); // Call immediately to avoid 1-second delay
   
-   
-
-    // Connect to WebSocket
-    WebSocketService.connect(() => {
-      console.log("Connected to WebSocket!");
   
-      // Subscribe to the selected room and language if selected
+    WebSocketService.connect(() => {
+  
       if (selectedRoom && progLang?.name) {
-        console.log("Subscribing to room and language:", selectedRoom, progLang.name);
         WebSocketService.subscribeToTopic(`/topic/roomCode/${selectedRoom}/${progLang.name}`, (message) => {
-          console.log("Received message:", message);
           setCode(message.code);
         });
       }
-  
-      // Assuming `rooms` is the list of rooms the user belongs to, and `role` is the user's role in that room
-      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN"); // Filter rooms where user is an ADMIN
+      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN"); 
   
       if (roomsUserIsAdminOf) {
       roomsUserIsAdminOf.forEach((roomUser) => {
-        console.log("Subscribing to joinRoom for:", roomUser.room.name); // Assuming `roomName` is the room identifier
         WebSocketService.subscribeToTopic(`/topic/${roomUser.room.name}/joinRoom`, (message) => {
           toast.info(
             <div style={{ fontSize: "1.2rem", padding: "10px", lineHeight: "1.5" }}>
@@ -326,19 +316,17 @@ const {compile} = useCompileCode();
               <strong>🏠 Room:</strong> {message.roomName}
             </div>,
             {
-              autoClose: 7000, // Longer duration (7 seconds)
+              autoClose: 7000,
               position: "top-right",
               theme: "colored",
               style: {
-                width: "400px", // Make it wider
+                width: "400px",
                 padding: "15px",
                 fontSize: "1.2rem",
               },
             }
           );
           getReqs();
-          console.log("Join room message:", message);
-          // Handle the message (e.g., update UI or handle join event)
         });
       });
     }
@@ -347,23 +335,21 @@ const {compile} = useCompileCode();
     getReqs();
   
     return () => {
-      // Cleanup interval and WebSocket subscriptions
       clearInterval(intervalId);
   
-      // Unsubscribe from the selected room and language when component unmounts or when room changes
       if (selectedRoom && progLang?.name) {
         WebSocketService.unsubscribeFromTopic(`/topic/roomCode/${selectedRoom}/${progLang.name}`);
       }
   
-      // Unsubscribe from all joinRoom topics for rooms the user has an ADMIN role
-      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN");// Filter rooms where user is an ADMIN
+
+      const roomsUserIsAdminOf = user?.roomUsers.filter(roomUser => roomUser.role === "ADMIN");
       if (roomsUserIsAdminOf) {
       roomsUserIsAdminOf.forEach((roomUser) => {
         WebSocketService.unsubscribeFromTopic(`/topic/${roomUser.room.name}/joinRoom`);
       });
     }
     };
-  }, [selectedRoom, progLang?.name, user?.roomUsers]); // Re-run effect when selectedRoom, progLang.name, or rooms change
+  }, [selectedRoom, progLang?.name, user?.roomUsers]); 
   
   
 
@@ -454,7 +440,7 @@ const {compile} = useCompileCode();
       <Box
   sx={{
     flexGrow: 1,
-    display: "flex", // Enable flexbox for equal width
+    display: "flex", 
     flexDirection: { xs: "column", sm: "column", md: "column", lg: "row" },
 
     gap:'15px',
@@ -485,16 +471,15 @@ const {compile} = useCompileCode();
     sx={{
       paddingTop:2,
       flex: 1, 
-      minHeight:'100%'// Take equal width
+      minHeight:'100%'
     }}
   >
 
   {
-    selectedRoom !== undefined ? <Editor
+  
+    selectedRoom !== undefined ?<div className="editor-container">
+       <Editor
     height={'100%'}
-    
-       // Fill parent container height
-       // Fill parent container width
       language={progLang?.name}
       defaultValue="// Write your code here..."
       value={code}
@@ -506,7 +491,8 @@ const {compile} = useCompileCode();
         lineHeight: 26,
         minimap: { enabled: false },
       }}
-    /> :
+    />
+    </div> :
 
     <Box
     sx={{   
@@ -533,7 +519,7 @@ const {compile} = useCompileCode();
     sx={{
    
       width:{lg:'40%', sm:'100%'},
-      display: "flex", // Optional: for content alignment inside this box
+      display: "flex", 
       flexDirection:"column",
       alignItems:'center',
      justifyContent:'center',
@@ -564,13 +550,13 @@ const {compile} = useCompileCode();
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: "#f0f0f0",
-              transition: "background-color 0.3s ease, transform 0.2s ease", // Smooth transition
+              transition: "background-color 0.3s ease, transform 0.2s ease",
     "&:hover": {
-      backgroundColor: "#e0e0e0", // Lighter background on hover
-      transform: "scale(1.05)", // Slight scale-up effect
+      backgroundColor: "#e0e0e0", 
+      transform: "scale(1.05)", 
     },
     "&:active": {
-      transform: "scale(0.95)", // Press-down effect
+      transform: "scale(0.95)", 
     },
             }}
           >
@@ -684,7 +670,10 @@ const {compile} = useCompileCode();
 
         <Grid item xs={2}>
           <ListItemButton
-          onClick={()=> setCurrentTab(4)}
+          onClick={()=> {
+            setCurrentTab(4);
+            getReqs();
+          }}
           
             sx={{
               height: 100,

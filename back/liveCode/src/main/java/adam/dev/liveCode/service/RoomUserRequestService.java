@@ -35,14 +35,11 @@ public class RoomUserRequestService {
     }
 
     public List<RoomUserRequest> getAllRoomUserRequests(Long adminId) {
-        List<RoomUserRequest> roomUserRequests = userService.findById(adminId)
+        return userService.findById(adminId)
                 .getRoomUsers().stream()
                 .flatMap(roomUser -> roomUser.getRoom().getRoomUserRequests().stream())
                 .filter(roomUserRequest -> roomUserRequest.getStatus() == Status.pending)
                 .collect(Collectors.toList());
-        System.out.println(roomUserRequests);
-
-        return roomUserRequests;
     }
 
     @Transactional

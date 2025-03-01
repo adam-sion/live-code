@@ -4,6 +4,8 @@ import adam.dev.liveCode.security.jwt.JwtAuthenticationFilter;
 import adam.dev.liveCode.service.CustomUserDetailsService;
 import adam.dev.liveCode.service.RoomUserSecurityService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -22,20 +24,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
+
+    @Value("${livecode.client.url}")
+    private String allowedOrigin;
+
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
-private final RoomUserSecurityService roomUserSecurityService;
+    private final RoomUserSecurityService roomUserSecurityService;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
+                .allowedOrigins(allowedOrigin)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
@@ -59,7 +65,7 @@ private final RoomUserSecurityService roomUserSecurityService;
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(allowedOrigin));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

@@ -25,7 +25,6 @@ public class RoomUserRequestController {
 
     @PostMapping("/handle")
     public void handleRoomUserRequest(@RequestBody RoomUserRequestDTO roomUserRequestDTO) {
-        System.out.println("recieved request " + roomUserRequestDTO);
         RoomUserRequest response = roomUserRequestService.handleRoomUserRequest(roomUserRequestDTO);
         String destination = String.format("/topic/pending/%s", response.getRequestedUser().getId());
         messagingTemplate.convertAndSend(destination, response);
@@ -34,7 +33,6 @@ public class RoomUserRequestController {
     @GetMapping("/{adminId}")
     public List<RoomUserRequest> getRoomUserRequests(@PathVariable Long adminId) {
        List<RoomUserRequest> reqs = roomUserRequestService.getAllRoomUserRequests(adminId);
-        System.out.println(reqs);
         return reqs;
     }
 
