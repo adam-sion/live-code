@@ -27,7 +27,7 @@ export const Navbar: FC = () => {
               padding:'5px',
               fontWeight: "bold",
               color: "black",
-              fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+              fontFamily: 'Gill Sans, Verdana',
               overflow: "hidden",
               "&:hover": {
                 color: "black",
@@ -47,7 +47,7 @@ export const Navbar: FC = () => {
               padding:'5px',
               fontWeight: "bold",
               color: "black",
-              fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+              fontFamily: 'Gill Sans, Verdana',
               overflow: "hidden",
               "&:hover": {
                 color: "black",
@@ -66,7 +66,7 @@ export const Navbar: FC = () => {
               padding:'5px',
               fontWeight: "bold",
               color: "black",
-              fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+              fontFamily: 'Gill Sans, Verdana',
               overflow: "hidden",
               "&:hover": {
                 color: "black",

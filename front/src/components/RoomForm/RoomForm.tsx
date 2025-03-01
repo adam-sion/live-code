@@ -86,7 +86,7 @@ export const RoomForm:FC<props> = ({method, onSubmit})=> {
             background: "linear-gradient(55deg, #004E95, #add8e6)",
             color: "white",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-            fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+            fontFamily: 'Gill Sans, Verdana',
           }}
         >
           {method}
