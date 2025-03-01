@@ -3,6 +3,7 @@ package adam.dev.liveCode.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    final String SECRET_KEY = "M3vP5F/3l6oF5eqrfvTVB2lGUc/PQ+f/xMiVowevcuY=";
+    @Value("${livecode.jwt.secret}")
+    private String SECRET_KEY;
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
