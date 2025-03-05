@@ -36,6 +36,7 @@ adam\dev\liveCode\entity\Room.class
 adam\dev\liveCode\dto\CreateRoomDTO.class
 adam\dev\liveCode\exception\UnauthorizedAccessException.class
 adam\dev\liveCode\controller\CodeController.class
+adam\dev\liveCode\controller\CronjobController.class
 adam\dev\liveCode\entity\RoomCodeId.class
 adam\dev\liveCode\config\PasswordHashConfig.class
 adam\dev\liveCode\security\jwt\model\AuthResponse.class

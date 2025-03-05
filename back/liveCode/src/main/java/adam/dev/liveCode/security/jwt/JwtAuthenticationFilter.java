@@ -32,7 +32,9 @@ private CustomUserDetailsService userDetailsService;
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         AntPathMatcher pathMatcher = new AntPathMatcher();
-        if (!pathMatcher.match("/auth/**", request.getRequestURI())){
+
+        if (!pathMatcher.match("/auth/**", request.getRequestURI()) &&
+                !pathMatcher.match("/cronjob", request.getRequestURI())){
     String jwt = getJwtFromCookies(request);
 
     if (jwt != null) {
